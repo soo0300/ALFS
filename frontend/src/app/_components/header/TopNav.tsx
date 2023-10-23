@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Menu,
   MenuButton,
@@ -8,17 +8,17 @@ import {
   MenuGroup,
   MenuOptionGroup,
   MenuDivider,
-  Button,
-} from "@chakra-ui/react";
-import { BsChevronDown } from "react-icons/bs";
+  Button
+} from '@chakra-ui/react';
+import { BsChevronDown } from 'react-icons/bs';
 
 type Props = {};
 
 export default function TopNav({}: Props) {
-  const [open, setOpen] = useState(false);
-  const openMenu: () => void = () => {
-    setOpen(true);
-  };
+  // const [open, setOpen] = useState(false);
+  // const openMenu: () => void = () => {
+  //   setOpen(true);
+  // };
   return (
     <div className="min-w-[1000px] h-[30px] flex justify-center">
       <div className="min-w-[1000px] flex items-center justify-end">
@@ -27,14 +27,10 @@ export default function TopNav({}: Props) {
         </div>
         <div>
           <Menu>
-            <MenuButton
-              as={Button}
-              rightIcon={<BsChevronDown />}
-              _hover={openMenu}
-            >
+            <MenuButton as={Button} rightIcon={<BsChevronDown />}>
               Actions
             </MenuButton>
-            <MenuList bg={"blue"}>
+            <MenuList bg={'blue'}>
               <MenuItem>Download</MenuItem>
               <MenuItem>Create a Copy</MenuItem>
               <MenuItem>Mark as Draft</MenuItem>

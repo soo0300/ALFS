@@ -1,11 +1,11 @@
-import React from "react";
-import { GiHamburgerMenu } from "react-icons/gi";
+import React from 'react';
+import { GiHamburgerMenu } from 'react-icons/gi';
 
 type Props = {};
 
 export default function BottomNav({}: Props) {
   return (
-    <div className="min-w-[1000px] h-[50px] flex justify-center items-center">
+    <div className="min-w-[1000px] h-[50px] flex justify-center items-center border-b-2">
       <div className="w-[1000px] flex">
         <div className="flex w-[200px]">
           <GiHamburgerMenu className="w-[20px] h-[20px] mr-2" />
