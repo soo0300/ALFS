@@ -20,18 +20,6 @@ public class AwsS3Controller {
 
     private final AwsS3Service awsS3Service;
 
-//    @PostMapping("/uploadFile")
-//    public ResponseEntity<String> updateUserImage(@RequestParam("images") MultipartFile multipartFile) {
-//
-//        try {
-//            awsS3Service.uploadFiles(multipartFile, "static");
-//        } catch (Exception e) {
-//            log.debug("updateUserImage exception msg", e);
-//            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-//        }
-//        return new ResponseEntity(HttpStatus.NO_CONTENT);
-//    }
-
     @PostMapping("/uploadFile")
     public ResponseEntity<?> updateUserImage(@RequestParam("images") MultipartFile multipartFile) {
         Map<String, Object> resultMap = new HashMap<>();
