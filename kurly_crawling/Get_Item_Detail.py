@@ -23,6 +23,7 @@ kor2en = {
 base_url = "https://www.kurly.com/goods/"
 
 driver = webdriver.Edge()
+detail_infos = []
 
 for item_info in item_infos:
     
@@ -36,8 +37,11 @@ for item_info in item_infos:
     time.sleep(1)
 
     # 상품 정보
-    section = driver.find_element(By.XPATH, '//*[@id="product-atf"]/section')
-    
+    try:
+        section = driver.find_element(By.XPATH, '//*[@id="product-atf"]/section')
+    except:
+        continue
+
     title = section.find_element(By.XPATH, 'div[2]/h2').text
     item_info['title'] = title
 
@@ -59,7 +63,7 @@ for item_info in item_infos:
         if key in kor2en.keys():
             item_info[kor2en[key]] = value
         else:
-            print(item_info['name'], key)
+            pass
 
 
     # buy_type은 일단 제외
@@ -90,9 +94,10 @@ for item_info in item_infos:
     ingredient_img = ingredient_img_element.get_attribute('src')
     images['ingredient_img'] = ingredient_img
 
+    detail_infos.append(item_info)
 
 with open('item_infos.json','w',encoding='utf-8') as f:
-    json.dump(item_infos, f, indent=4, ensure_ascii=False)
+    json.dump(detail_infos, f, indent=4, ensure_ascii=False)
 f.close()
 
 
