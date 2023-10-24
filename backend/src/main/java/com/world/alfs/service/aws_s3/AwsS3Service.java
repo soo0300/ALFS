@@ -1,4 +1,4 @@
-package com.world.alfs.AwsS3;
+package com.world.alfs.service.aws_s3;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
