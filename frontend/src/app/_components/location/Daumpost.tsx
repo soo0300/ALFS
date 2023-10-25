@@ -1,8 +1,4 @@
 "use client";
-import { useDaumPostcodePopup } from "react-daum-postcode";
-import { postcodeScriptUrl } from "react-daum-postcode/lib/loadPostcode";
-import { useEffect } from "react";
-import DaumPostcode from "react-daum-postcode";
 
 import {
   Modal,
@@ -15,28 +11,34 @@ import {
   useDisclosure,
   Button,
 } from "@chakra-ui/react";
+import DaumPostcode from "react-daum-postcode";
 
-function DaumPost() {
+function DaumPost(props: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleComplete = (e: any) => {
-    console.log(e);
+    onClose();
+    props.data(e.address);
   };
+
   return (
     <>
+      <Button onClick={onOpen} type="button" colorScheme="whatsapp" variant="outline">
+        주소검색
+      </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <DaumPostcode onComplete={handleComplete} />
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>주소검색</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>{/* <Lorem count={2} /> */}</ModalBody>
+          <ModalBody>
+            <DaumPostcode onComplete={handleComplete} />
+          </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button colorScheme="whatsapp" variant="outline" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

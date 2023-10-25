@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, FormControl, FormHelperText, Input } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { AiOutlineSearch } from "react-icons/ai";
-import DaumPostcode from "react-daum-postcode";
 
 import Link from "next/link";
 import DaumPost from "@/app/_components/location/Daumpost";
@@ -50,14 +49,10 @@ export default function Page() {
     address_2: false,
     email: false,
     phone_number: false,
+    isSignup: false,
   });
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const { register, handleSubmit, watch, setValue } = useForm<Inputs>();
 
   //회원가입버튼
   const handleSignup = (e: Inputs) => {
@@ -67,11 +62,13 @@ export default function Page() {
   //중복검사버튼
   const handleValidate = (id: string) => {
     if (id === "id") {
+      //api호출
       setValidate((prev) => ({
         ...prev,
         [id]: true,
       }));
     } else if (id === "email") {
+      //api호출
       setValidate((prev) => ({
         ...prev,
         [id]: true,
@@ -90,11 +87,13 @@ export default function Page() {
       ...prev,
       [id]: true,
     }));
+
     if (
       (id === "password" && pwRex.test(watch("password"))) ||
       (id === "passwordCheck" && watch("passwordCheck") == watch("password")) ||
       (id === "name" && nameRex.test(watch("name"))) ||
-      (id === "phone_number" && phoneRex.test(watch("phone_number")))
+      (id === "phone_number" && phoneRex.test(watch("phone_number"))) ||
+      (id === "address_2" && watch("address_2"))
     ) {
       setValidate((prev) => ({
         ...prev,
@@ -102,6 +101,16 @@ export default function Page() {
       }));
     }
   };
+
+  //주소검색
+  const setAddress = (address: string) => {
+    setValue("address_1", address);
+    setValidate((prev) => ({
+      ...prev,
+      address_1: true,
+    }));
+  };
+  console.log(validate);
 
   return (
     <div className="min-w-[650px] flex justify-center">
@@ -311,42 +320,94 @@ export default function Page() {
                 주소<p className="text-red-500">*</p>
               </div>
               <div className="w-[300px]">
-                <button
-                  // onClick={getAddress}
-                  className="w-[300px] h-[40px] border-green-500 border-[1px] text-green-500 flex justify-center items-center"
-                >
-                  <AiOutlineSearch className="w-[23px] h-[23px]" />
-                  주소검색
-                  <DaumPostcode onComplete={handleComplete} />
-                </button>
-
-                {text.phone_number && (
-                  <FormHelperText className="text-red-500 text-xs">*번호 형식이 아닙니다.</FormHelperText>
-                )}
+                <Input
+                  borderColor="gray.300"
+                  disabled
+                  {...register("address_1", {
+                    onChange() {
+                      handleChange("address_1");
+                    },
+                  })}
+                />
               </div>
-              <div className="w-[100px]"></div>
+              <div className="w-[100px]">
+                <DaumPost data={setAddress} />
+              </div>
             </div>
 
             <div className="flex justify-evenly mb-[20px]">
-              <div className="w-[100px] h-[40px] flex items-center">
-                생년월일<p className="text-red-500">*</p>
+              <div className="w-[100px] h-[40px]  flex items-center">
+                상세주소<p className="text-red-500">*</p>
               </div>
               <div className="w-[300px]">
                 <Input
-                  type="date"
                   borderColor="gray.300"
-                  justifyContent="center"
                   focusBorderColor="green.500"
-                  {...(register("birth"), { required: true })}
-                />
-                {text.phone_number && (
-                  <FormHelperText className="text-red-500 text-xs">*생년월일을 선택해주세요</FormHelperText>
-                )}
+                  placeholder="상세주소를 입력해주세요"
+                  {...register("address_2", {
+                    onChange() {
+                      handleChange("address_2");
+                    },
+                  })}
+                ></Input>
+                {text.address_2 &&
+                  (validate.address_2 ? null : (
+                    <FormHelperText className="text-red-500 text-xs">
+                      {!watch("address_2") && "*상세주소를 입력해주세요."}
+                    </FormHelperText>
+                  ))}
               </div>
               <div className="w-[100px]"></div>
             </div>
 
-            <div className="flex justify-evenly mb-[20px]">
+            {/* <div className="flex justify-evenly mb-[20px]">
+              <div className="w-[100px] h-[40px] flex items-center">
+                생년월일<p className="text-red-500">*</p>
+              </div>
+              <div className="w-[300px] border-gray-300 rounded-[6px] flex border-[1px]">
+                <Input
+                  type="number"
+                  variant="unstyled"
+                  placeholder="YYYY"
+                  borderColor="gray.300"
+                  justifyContent="center"
+                  focusBorderColor="green.500"
+                  textAlign="center"
+                  onChange={changeDate("year")}
+                />
+                <p className="flex items-center">/</p>
+                <Input
+                  type="number"
+                  variant="unstyled"
+                  placeholder="MM"
+                  borderColor="gray.300"
+                  justifyContent="center"
+                  focusBorderColor="green.500"
+                  textAlign="center"
+                  onChange={changeDate("month")}
+                />
+                <p className="flex items-center">/</p>
+                <Input
+                  type="number"
+                  variant="unstyled"
+                  placeholder="DD"
+                  borderColor="gray.300"
+                  justifyContent="center"
+                  focusBorderColor="green.500"
+                  textAlign="center"
+                  onChange={changeDate("day")}
+                />
+                {text.birth &&
+                  (validate.birth ? null : (
+                    <FormHelperText className="text-red-500 text-xs">
+                      {watch("birth") ? null : "*생년월일을 입력해주세요."}
+                    </FormHelperText>
+                  ))}
+              </div>
+              <div className="w-[100px]"></div>
+            </div> */}
+
+            {/* <div className="flex justify-evenly mb-[20px]">
               <div className="w-[100px] h-[40px]  flex items-center">
                 알러지<p className="text-red-500">*</p>
               </div>
@@ -358,9 +419,9 @@ export default function Page() {
                 {text.phone_number && <FormHelperText className="text-red-500 text-xs">*</FormHelperText>}
               </div>
               <div className="w-[100px]"></div>
-            </div>
+            </div> */}
 
-            <div className="flex justify-evenly my-[20px]">
+            {/* <div className="flex justify-evenly my-[20px]">
               <div className="w-[100px] h-[40px]  flex items-center">
                 기피식품<p className="text-red-500">*</p>
               </div>
@@ -379,13 +440,30 @@ export default function Page() {
               <div className="w-[100px] flex justify-evenly">
                 <button className="w-[100px] h-[40px] border-green-500 border-[1px] text-green-500">추가하기</button>
               </div>
-            </div>
+            </div>*/}
           </div>
 
           <div className="flex justify-evenly my-[50px]">
-            <button type="submit" className="w-[200px] h-[40px] border-green-500 border-[1px] bg-green-500 text-white">
+            <Button
+              width={200}
+              isDisabled={
+                !(
+                  validate.id &&
+                  validate.password &&
+                  validate.passwordCheck &&
+                  validate.name &&
+                  validate.email &&
+                  validate.phone_number &&
+                  validate.address_1 &&
+                  validate.address_2
+                )
+              }
+              variant="outline"
+              colorScheme="whatsapp"
+              type="submit"
+            >
               가입하기
-            </button>
+            </Button>
           </div>
         </FormControl>
       </form>
