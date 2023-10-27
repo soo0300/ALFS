@@ -1,11 +1,16 @@
 package com.world.alfs.controller.product;
 
+import com.world.alfs.controller.ApiResponse;
 import com.world.alfs.controller.product.request.AddProductRequest;
+import com.world.alfs.controller.product.response.ProductResponse;
+import com.world.alfs.domain.product.Product;
 import com.world.alfs.service.product.ProductService;
 import com.world.alfs.service.product.dto.AddProductDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,11 +27,13 @@ public class ProductController {
 
     }
 
-    //상품 목록 조회
-    //상품 상세 조회
-    //상품 상세 수정
-    //상품 삭제
-
+    @GetMapping()
+    public ApiResponse<ProductResponse>getProduct(@PathVariable Long id){
+        ProductResponse productResponse = null;
+        Optional<Product> savedProduct = productService.getProduct(id);
+//        toResponse();
+        return ApiResponse.ok(productResponse);
+    }
     @GetMapping("/hello")
     public Long getProduct(){
         return 1L;
