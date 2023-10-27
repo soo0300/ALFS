@@ -1,6 +1,7 @@
 package com.world.alfs.service.product;
 
 
+import com.world.alfs.controller.product.response.ProductResponse;
 import com.world.alfs.domain.product.Product;
 import com.world.alfs.domain.product.repository.ProductRepository;
 import com.world.alfs.domain.product_img.ProductImg;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -36,5 +38,14 @@ public class ProductService {
         Optional<Product> product = productRepository.findById(id);
         product.get().setProduct(price,sale);
         return product.get().getId();
+    }
+
+    public List<ProductResponse> getAllProduct() {
+        List<Product> productList = productRepository.findAll();
+        List<ProductResponse> productResponseList = null;
+        for(int i=0; i<productList.size(); i++){
+            productResponseList.add(productList.get(i).toResponse());
+        }
+        return productResponseList;
     }
 }
