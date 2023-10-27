@@ -14,9 +14,5 @@ public class SupervisorLoginRequest {
     @NotNull
     private String password;
 
-    @Builder
-    public SupervisorLoginRequest(String identifier, String password) {
-        this.identifier = identifier;
-        this.password = password;
-    }
+
 }
