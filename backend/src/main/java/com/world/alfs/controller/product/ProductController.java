@@ -24,19 +24,15 @@ public class ProductController {
     public Long addProduct(@RequestBody AddProductRequest request){
         AddProductDto dto = request.toDto();
         return productService.addProduct(dto);
-
     }
 
-    @GetMapping()
+    @GetMapping("/{id}")
     public ApiResponse<ProductResponse>getProduct(@PathVariable Long id){
-        ProductResponse productResponse = null;
+        System.out.print("id는"+id);
         Optional<Product> savedProduct = productService.getProduct(id);
-//        toResponse();
+        ProductResponse productResponse = savedProduct.get().toResponse();
         return ApiResponse.ok(productResponse);
     }
-    @GetMapping("/hello")
-    public Long getProduct(){
-        return 1L;
-    }
+
 
 }

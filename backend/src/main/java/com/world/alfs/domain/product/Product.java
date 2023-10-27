@@ -1,6 +1,7 @@
 package com.world.alfs.domain.product;
 
 
+import com.world.alfs.controller.product.response.ProductResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +15,6 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column()
@@ -85,5 +85,27 @@ public class Product {
         this.buyType = buyType;
         this.stock = stock;
         this.content = content;
+    }
+
+    public ProductResponse toResponse() {
+        return ProductResponse.builder()
+                .id(id)
+                .name(name)
+                .title(title)
+                .price(price)
+                .sale(sale)
+                .img(img)
+                .delivery(delivery)
+                .seller(seller)
+                .pack(pack)
+                .count(count)
+                .weight(weight)
+                .allergy(allergy)
+                .expireDate(expireDate)
+                .information(information)
+                .buyType(buyType)
+                .stock(stock)
+                .content(content)
+                .build();
     }
 }
