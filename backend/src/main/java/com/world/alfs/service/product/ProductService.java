@@ -47,7 +47,6 @@ public class ProductService {
         System.out.println("size"+productList.size());
         for(int i=0; i<productList.size(); i++){
             ProductResponse response = productList.get(i).toResponse();
-//            System.out.println(response.getId());
             productResponseList.add(response);
         }
         return productResponseList;
