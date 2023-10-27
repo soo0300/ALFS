@@ -51,4 +51,10 @@ public class ProductService {
         }
         return productResponseList;
     }
+
+    public Long deleteProduct(Long id) {
+        productRepository.deleteById(id);
+        productImgRepository.deleteById(id);
+        return id;
+    }
 }
