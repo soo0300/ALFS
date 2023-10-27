@@ -44,7 +44,6 @@ public class ProductService {
     public List<ProductResponse> getAllProduct() {
         List<Product> productList = productRepository.findAll();
         List<ProductResponse> productResponseList = new ArrayList<>();
-        System.out.println("size"+productList.size());
         for(int i=0; i<productList.size(); i++){
             ProductResponse response = productList.get(i).toResponse();
             productResponseList.add(response);
