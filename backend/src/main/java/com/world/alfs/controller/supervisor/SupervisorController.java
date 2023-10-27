@@ -1,9 +1,12 @@
 package com.world.alfs.controller.supervisor;
 
 import com.world.alfs.controller.ApiResponse;
+import com.world.alfs.controller.supervisor.request.OcrUrlRequest;
 import com.world.alfs.controller.supervisor.request.SupervisorLoginRequest;
+import com.world.alfs.controller.supervisor.response.OcrUrlResponse;
 import com.world.alfs.controller.supervisor.response.SupervisorLoginResponse;
 import com.world.alfs.service.supervisor.SupervisorService;
+import com.world.alfs.service.supervisor.dto.OcrUrlDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +28,15 @@ public class SupervisorController {
         String supervisorPassword = request.getPassword();
 
         SupervisorLoginResponse response = supervisorService.loginSupervisor(supervisorIdentifier, supervisorPassword);
+        return ApiResponse.ok(response);
+    }
+
+    @PostMapping("/ocr/url")
+    public ApiResponse<OcrUrlResponse> getUrlIngredient(@RequestBody OcrUrlRequest request){
+
+        OcrUrlDto dto = request.toDto();
+        OcrUrlResponse response = supervisorService.getUrlIngredient(dto);
+
         return ApiResponse.ok(response);
     }
 }
