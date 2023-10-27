@@ -3,6 +3,8 @@ package com.world.alfs.service.product;
 
 import com.world.alfs.domain.product.Product;
 import com.world.alfs.domain.product.repository.ProductRepository;
+import com.world.alfs.domain.product_img.ProductImg;
+import com.world.alfs.domain.product_img.repostiory.ProductImgRepository;
 import com.world.alfs.service.product.dto.AddProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,10 +18,13 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductImgRepository productImgRepository;
 
     public Long addProduct(AddProductDto dto) {
         Product product = dto.toEntity();
+        ProductImg productImg = dto.toImgEntity();
         Product savedProduct = productRepository.save(product);
+        productImgRepository.save(productImg);
         return savedProduct.getId();
     }
 
