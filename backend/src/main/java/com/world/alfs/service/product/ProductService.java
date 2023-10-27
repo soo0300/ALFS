@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -19,5 +21,15 @@ public class ProductService {
         Product product = dto.toEntity();
         Product savedProduct = productRepository.save(product);
         return savedProduct.getId();
+    }
+
+    public Optional<Product> getProduct(Long id) {
+        return productRepository.findById(id);
+    }
+
+    public Long setProduct(Long id, int price, int sale) {
+        Optional<Product> product = productRepository.findById(id);
+        product.get().setProduct(price,sale);
+        return product.get().getId();
     }
 }
