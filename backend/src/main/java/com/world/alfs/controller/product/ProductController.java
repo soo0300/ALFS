@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -33,11 +34,24 @@ public class ProductController {
         return ApiResponse.ok(productResponse);
     }
 
+
+    @GetMapping("/all")
+    public ApiResponse<List<ProductResponse>>getAllProduct(){
+        List<ProductResponse> product_list = productService.getAllProduct();
+        return ApiResponse.ok(product_list);
+    }
+
     @PatchMapping("{id}/{price}/{sale}")
     public ApiResponse<Long>setProduct(@PathVariable Long id,@PathVariable int price, @PathVariable int sale){
         Long savedId = productService.setProduct(id,price,sale);
-        return ApiResponse.ok(1L);
+        return ApiResponse.ok(savedId);
 
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Long>deleteProduct(@PathVariable Long id){
+        Long savedId = productService.deleteProduct(id);
+        return ApiResponse.ok(savedId);
     }
 
 
