@@ -25,4 +25,12 @@ public class AllergyController {
         return ApiResponse.ok(response);
     }
 
+
+    @GetMapping()
+    public ApiResponse<Boolean> searchAllergyName(List<String> allergyNameList){
+        Boolean flag = allergyService.searchAllergyName(allergyNameList);
+        return ApiResponse.ok(true);
+    }
+
+
 }
