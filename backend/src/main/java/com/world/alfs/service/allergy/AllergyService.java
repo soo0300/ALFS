@@ -37,4 +37,28 @@ public class AllergyService {
         return allergyResponseList;
     }
 
+    public Boolean searchAllergyName(List<String> allergyNameList) {
+        //allergyNameList 중에서 있다면 그것을 등록하고, 아니라면 addAllergy 하고 등록하기.
+        for(int i=0; i<allergyNameList.size(); i++){
+            Allergy allergy = allergyRepository.findByAllergyName(allergyNameList.get(i));
+            if(allergy ==null){
+                //등록하기
+                Allergy addAllergy = Allergy.builder()
+                        .allergyName(allergyNameList.get(i))
+                        .allergyType(0)
+                        .build();
+                allergyRepository.save(addAllergy);
+
+            }
+            Allergy savedAllergy = allergyRepository.findByAllergyName(allergyNameList.get(i));
+            Long allergyId = savedAllergy.getId();
+
+
+            //member_allergy
+            //id, member_id, allergyId를  AddMemberAllergyRequest 에 담아서 addAllergy
+        }
+
+        return true;
+    }
+
 }
