@@ -21,13 +21,13 @@ public class MemberAllergy {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "allergy_id")
-    private Allergy all;
+    private Allergy allergy;
 
 
     @Builder
-    public MemberAllergy(Long id, Member member, Allergy all) {
+    public MemberAllergy(Long id, Member member, Allergy allergy) {
         this.id = id;
         this.member = member;
-        this.all = all;
+        this.allergy = allergy;
     }
 }
