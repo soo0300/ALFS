@@ -33,6 +33,7 @@ public class AwsS3Service {
     }
 
     public String upload(File uploadFile, String filePath) {
+        log.debug("upload 시작");
         String fileName = filePath + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
         removeNewFile(uploadFile);
@@ -41,12 +42,14 @@ public class AwsS3Service {
 
     // S3로 업로드
     private String putS3(File uploadFile, String fileName) {
+        log.debug("putS3 시작");
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
     // 로컬에 저장된 이미지 지우기
     private void removeNewFile(File targetFile) {
+        log.debug("removeNewFile 시작");
         if (targetFile.delete()) {
             System.out.println("File delete success");
             return;
@@ -56,11 +59,13 @@ public class AwsS3Service {
 
     // 로컬에 파일 업로드 하기
     private Optional<File> convert(MultipartFile file) throws  IOException {
+        log.debug("convert 시작");
         File convertFile = new File(file.getOriginalFilename());
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
             }catch (Exception e){
+                log.debug(e.getMessage());
                 e.printStackTrace();
             }
             return Optional.of(convertFile);
