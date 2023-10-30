@@ -3,6 +3,7 @@ package com.world.alfs.controller.alternative;
 import com.world.alfs.controller.ApiResponse;
 import com.world.alfs.controller.alternative.request.CategoryListRequest;
 import com.world.alfs.controller.alternative.response.CategoryResponse;
+import com.world.alfs.controller.product.response.ProductResponse;
 import com.world.alfs.service.alternative.AlternativeService;
 import com.world.alfs.service.alternative.dto.GetCategoryListDto;
 import lombok.RequiredArgsConstructor;
@@ -28,4 +29,10 @@ public class AlternativeController {
         return ApiResponse.ok(categoryResponseList);
     }
 
+    @PostMapping("/category/name")
+    public ApiResponse<List<ProductResponse>> getAlternativeProduct(@RequestBody String alternativeName) {
+        List<ProductResponse> productResponseList = alternativeService.getAlternativeProduct(alternativeName);
+        return ApiResponse.ok(productResponseList);
+    }
+    
 }
