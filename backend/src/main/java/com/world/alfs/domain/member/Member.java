@@ -25,11 +25,6 @@ public class Member {
     private int birth;
 
     @Column(nullable = false)
-    private String address_1;
-
-    private String address_2;
-
-    @Column(nullable = false)
     private int point;
 
     @Column(nullable = false)
@@ -38,16 +33,15 @@ public class Member {
     @Column(name = "phone_number",nullable = false)
     private int phoneNumber;
 
-//    @OneToMany(mappedBy = "member")
-//    private List<Basket> baskets = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member")
-//    private List<Board> boards = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member")
-//    private List<MemberAllergy> memberAllergies = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member")
-//    private List<Wining> winings = new ArrayList<>();
-
+    @Builder
+    public Member(Long id, String name, String identifier, String password, int birth, int point, String email, int phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.identifier = identifier;
+        this.password = password;
+        this.birth = birth;
+        this.point = point;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 }
