@@ -1,8 +1,10 @@
 package com.world.alfs.service.allergy;
 
 import com.world.alfs.controller.allergy.response.AllergyResponse;
+import com.world.alfs.controller.member_allergy.request.AddMemberAllergyRequest;
 import com.world.alfs.domain.allergy.Allergy;
 import com.world.alfs.domain.allergy.repository.AllergyRepository;
+import com.world.alfs.service.member_allergy.dto.AddMemberAllergyDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,12 +39,10 @@ public class AllergyService {
         return allergyResponseList;
     }
 
-    public Boolean searchAllergyName(List<String> allergyNameList) {
-        //allergyNameList 중에서 있다면 그것을 등록하고, 아니라면 addAllergy 하고 등록하기.
+    public Boolean searchAllergyName(Long member_id, List<String> allergyNameList) {
         for(int i=0; i<allergyNameList.size(); i++){
             Allergy allergy = allergyRepository.findByAllergyName(allergyNameList.get(i));
             if(allergy ==null){
-                //등록하기
                 Allergy addAllergy = Allergy.builder()
                         .allergyName(allergyNameList.get(i))
                         .allergyType(0)
@@ -53,9 +53,13 @@ public class AllergyService {
             Allergy savedAllergy = allergyRepository.findByAllergyName(allergyNameList.get(i));
             Long allergyId = savedAllergy.getId();
 
+            //id, member_id, allergyId를  AddMemberAllergyRequest 에 담아서 addAllergy -> Redirect
+            AddMemberAllergyDto dto = AddMemberAllergyDto.builder()
+                    .allergy_id(allergyId)
+                    .member_id(member_id)
+                    .build();
 
-            //member_allergy
-            //id, member_id, allergyId를  AddMemberAllergyRequest 에 담아서 addAllergy
+
         }
 
         return true;
