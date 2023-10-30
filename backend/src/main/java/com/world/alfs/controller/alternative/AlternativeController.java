@@ -29,10 +29,10 @@ public class AlternativeController {
         return ApiResponse.ok(categoryResponseList);
     }
 
-    @PostMapping("/category/name")
-    public ApiResponse<List<ProductResponse>> getAlternativeProduct(@RequestBody String alternativeName) {
-        List<ProductResponse> productResponseList = alternativeService.getAlternativeProduct(alternativeName);
+    @GetMapping("/category/{name}")
+    public ApiResponse<List<ProductResponse>> getAlternativeProduct(@PathVariable String name) {
+        List<ProductResponse> productResponseList = alternativeService.getAlternativeProduct(name);
         return ApiResponse.ok(productResponseList);
     }
-    
+
 }
