@@ -4,7 +4,9 @@ package com.world.alfs.service.member;
 import com.world.alfs.domain.member.Member;
 import com.world.alfs.domain.member.repository.MemberRepository;
 import com.world.alfs.service.member.dto.AddMemberDto;
+import com.world.alfs.service.member.dto.LoginMemberDto;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.dynamic.DynamicType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ public class MemberService {
 
     private final MemberRepository userRepository;
 
+    // 회원가입
     public Long addMember(AddMemberDto addMemberDto){
         if (checkIdentifier(addMemberDto.getIdentifier())) return -1L;
         if (checkEmail(addMemberDto.getEmail())) return -2L;
@@ -28,6 +31,17 @@ public class MemberService {
         Member member = userRepository.save(addMemberDto.toEntity());
         return member.getId();
     }
+    // 로그인
+    public Optional<Long> login(LoginMemberDto loginMemberDto) {
+        Optional<Member> member = userRepository.findByIdentifierAndPassword(loginMemberDto.getIdentifier(), loginMemberDto.getPassword());
+        if (member.isPresent()){
+            return Optional.of(member.get().getId());
+        }
+        return Optional.of(0L);
+    }
+
+    // 로그아웃
+
     // Identifier 중복 확인
     public boolean checkIdentifier(String identifier){
         Optional<Member> result = userRepository.findByIdentifier(identifier);

@@ -1,6 +1,8 @@
 package com.world.alfs.controller.member;
 
 import com.world.alfs.controller.ApiResponse;
+import com.world.alfs.controller.member.request.LoginRequest;
+import com.world.alfs.controller.member.request.LogoutRequest;
 import com.world.alfs.controller.member.request.SignUpRequest;
 import com.world.alfs.service.Address.dto.AddressDto;
 import com.world.alfs.service.member.MemberService;
@@ -9,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -47,6 +50,21 @@ public class MemberController {
             message = "알 수 없는 오류";
         }
         return ApiResponse.badRequest(message);
+    }
+
+    @GetMapping()
+    public ApiResponse<Long> login(@RequestBody LoginRequest loginRequest){
+        Optional<Long> member_id = memberService.login(loginRequest.toDto());
+        if (member_id.get() == 0){
+            return ApiResponse.badRequest("잘못된 아이디 혹은 비밀번호 입니다.");
+        }
+        return ApiResponse.ok(member_id.get());
+    }
+
+    @DeleteMapping()
+    public ApiResponse<Long> logout(@RequestBody LogoutRequest logoutRequest){
+        Long id = logoutRequest.toDto().getId();
+        return ApiResponse.ok(null);
     }
 
     @GetMapping("/check/identifier")
