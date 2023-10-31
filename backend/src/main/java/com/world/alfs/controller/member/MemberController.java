@@ -4,7 +4,7 @@ import com.world.alfs.controller.ApiResponse;
 import com.world.alfs.controller.member.request.LoginRequest;
 import com.world.alfs.controller.member.request.LogoutRequest;
 import com.world.alfs.controller.member.request.SignUpRequest;
-import com.world.alfs.service.Address.dto.AddressDto;
+import com.world.alfs.service.address.dto.AddressDto;
 import com.world.alfs.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.world.alfs.service.Address.dto;
+package com.world.alfs.service.address.dto;
 
 import lombok.Builder;
 import lombok.Data;
