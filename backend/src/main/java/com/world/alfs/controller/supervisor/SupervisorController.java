@@ -12,8 +12,6 @@ import com.world.alfs.service.supervisor.dto.OcrFileDto;
 import com.world.alfs.service.supervisor.dto.OcrUrlDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,27 +50,24 @@ public class SupervisorController {
     @PostMapping("/ocr/file")
     public ApiResponse<FileIngredientResponse> getFileIngredient(@RequestPart("images") List<MultipartFile> multipartFile, @RequestPart("OcrFileRequest") OcrFileRequest request){
 
-        // s3에 이미지 등록
         List<String> imgUrls = new ArrayList<>();
         for(MultipartFile file : multipartFile){
             String imgUrl = null;
             try {
                 imgUrl = awsS3Service.uploadFiles(file, "static");
                 if(imgUrl == null || imgUrl.isEmpty()){
-                    return ApiResponse.badRequest("이미지가 NO_CONTENT입니다.");
+                    return ApiResponse.badRequest("이미지가 없습니다.");
                 }
                 imgUrls.add(imgUrl);
             } catch (Exception e) {
                 log.debug("updateUserImage exception msg", e);
-                return ApiResponse.badRequest("이미지 업로드가 실패했습니다.");
+                return ApiResponse.badRequest("s3에 이미지 업로드룰 실패했습니다.");
             }
         }
 
-        // 네이버로 해서 ocr 추출해서 보내주기
         OcrFileDto dto = request.toDto(multipartFile.get(multipartFile.size()-1));
         List<String> response = supervisorService.getFileIngredient(dto);
         if(response.isEmpty()){
-//            return ApiResponse.badRequest("인식된 원재료명이 없습니다.");
             log.debug("인식된 원재료명이 없습니다.");
         }
 
