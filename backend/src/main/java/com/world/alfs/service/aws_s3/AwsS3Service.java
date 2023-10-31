@@ -49,16 +49,15 @@ public class AwsS3Service {
 
     // 로컬에 저장된 이미지 지우기
     private void removeNewFile(File targetFile) {
-        log.debug("removeNewFile 시작");
         if (targetFile.delete()) {
-            System.out.println("File delete success");
+            log.info("File delete success");
             return;
         }
-        System.out.println("File delete fail");
+        log.info("File delete fail");
     }
 
     // 로컬에 파일 업로드 하기
-    private Optional<File> convert(MultipartFile file) throws  IOException {
+    public Optional<File> convert(MultipartFile file) throws  IOException {
         log.debug("convert 시작");
         File convertFile = new File(file.getOriginalFilename());
         if(convertFile.createNewFile()) {
