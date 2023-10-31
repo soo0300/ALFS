@@ -8,6 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.regex.Pattern;
+
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -15,8 +20,37 @@ public class MemberService {
 
     private final MemberRepository userRepository;
 
-    public Long addMember(AddMemberDto addMemberDto) {
+    public Long addMember(AddMemberDto addMemberDto){
         Member member = userRepository.save(addMemberDto.toEntity());
         return member.getId();
+    }
+    // Identifier 중복 확인
+    public boolean checkIdentifier(String identifier){
+        Optional<Member> result = userRepository.findByIdentifier(identifier);
+        if (result.isPresent()) return true;
+        return false;
+    }
+    // Email 확인
+    public boolean checkEmail(String email){
+        Optional<Member> result = userRepository.findByEmail(email);
+        if (result.isPresent()) return true;
+        return false;
+    }
+
+    // Phone Number 확인
+    public boolean checkPhoneNumber(String phoneNumber){
+        Optional<Member> result = userRepository.findByPhoneNumber(phoneNumber);
+        if (result.isPresent()) return true;
+        return false;
+    }
+
+    // Password 일치 확인
+    public boolean checkPassword(String password, String passwordCheck){
+        return !Objects.equals(password, passwordCheck);
+    }
+
+    // 패턴 일치 확인
+    private boolean checkPattern(String target, String pattern){
+        return Pattern.matches(pattern, target);
     }
 }
