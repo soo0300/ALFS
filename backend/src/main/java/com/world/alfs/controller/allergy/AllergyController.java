@@ -27,13 +27,13 @@ public class AllergyController {
     }
 
 
-    @GetMapping()
+    @GetMapping("/allergy")
     public ApiResponse<Boolean> checkAllergyName(@PathVariable Long member_id,@PathVariable List<String> allergyNameList){
         Boolean flag = allergyService.checkAllergyName(member_id, allergyNameList,1);
         return ApiResponse.ok(true);
     }
 
-    @GetMapping()
+    @GetMapping("/hate")
     public ApiResponse<Boolean> checkHateName(@PathVariable Long member_id,@PathVariable List<String> hateNameList){
         Boolean flag = allergyService.checkAllergyName(member_id, hateNameList,0);
         return ApiResponse.ok(true);
