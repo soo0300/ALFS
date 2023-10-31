@@ -21,6 +21,10 @@ public class MemberService {
     private final MemberRepository userRepository;
 
     public Long addMember(AddMemberDto addMemberDto){
+        if (checkIdentifier(addMemberDto.getIdentifier())) return -1L;
+        if (checkEmail(addMemberDto.getEmail())) return -2L;
+        if (checkPhoneNumber(addMemberDto.getPhoneNumber())) return -3L;
+        if (checkPassword(addMemberDto.getPassword(), addMemberDto.getPasswordCheck())) return -4L;
         Member member = userRepository.save(addMemberDto.toEntity());
         return member.getId();
     }
