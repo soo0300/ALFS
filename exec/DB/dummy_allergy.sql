@@ -18,5 +18,5 @@ insert into allergy(allergy_name, allergy_type) values ('굴', 1);
 insert into allergy(allergy_name, allergy_type) values ('조개류', 1);
 insert into allergy(allergy_name, allergy_type) values ('게', 1);
 insert into allergy(allergy_name, allergy_type) values ('오징어', 1);
-insert into allergy(allergy_name, allergy_type) values ('아황산', 1);
+insert into allergy(allergy_name, allergy_type) values ('아황산류', 1);
 insert into allergy(allergy_name, allergy_type) values ('잣', 1);
