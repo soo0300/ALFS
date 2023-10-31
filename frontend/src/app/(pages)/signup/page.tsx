@@ -78,7 +78,6 @@ export default function Page() {
     month: false,
     day: false,
     address_1: false,
-    address_2: false,
     email: false,
     phone_number: false,
     isSignup: false,
@@ -476,9 +475,7 @@ export default function Page() {
             </div>
 
             <div className="flex justify-evenly mb-[20px]">
-              <div className="w-[100px] h-[40px]  flex items-center">
-                상세주소<p className="text-red-500">*</p>
-              </div>
+              <div className="w-[100px] h-[40px]  flex items-center">상세주소</div>
               <div className="w-[300px]">
                 <Input
                   borderColor="gray.300"
@@ -490,12 +487,6 @@ export default function Page() {
                     },
                   })}
                 ></Input>
-                {showtext.address_2 &&
-                  (validate.address_2 ? null : (
-                    <FormHelperText className="text-red-500 text-xs">
-                      {!watch("address_2") && "*상세주소를 입력해주세요."}
-                    </FormHelperText>
-                  ))}
               </div>
               <div className="w-[100px]"></div>
             </div>
@@ -649,7 +640,6 @@ export default function Page() {
                   validate.email &&
                   validate.phone_number &&
                   validate.address_1 &&
-                  validate.address_2 &&
                   validate.year &&
                   validate.month &&
                   validate.day
