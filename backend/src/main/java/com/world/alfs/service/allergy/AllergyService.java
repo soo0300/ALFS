@@ -39,7 +39,7 @@ public class AllergyService {
         return allergyResponseList;
     }
 
-    public Boolean searchAllergyName(Long member_id, List<String> allergyNameList) {
+    public Boolean checkAllergyName(Long member_id, List<String> allergyNameList) {
         for(int i=0; i<allergyNameList.size(); i++){
             Allergy allergy = allergyRepository.findByAllergyName(allergyNameList.get(i));
             if(allergy ==null){

@@ -29,7 +29,7 @@ public class AllergyController {
 
     @GetMapping()
     public ApiResponse<Boolean> searchAllergyName(@PathVariable Long member_id,@PathVariable List<String> allergyNameList){
-        Boolean flag = allergyService.searchAllergyName(member_id, allergyNameList);
+        Boolean flag = allergyService.checkAllergyName(member_id, allergyNameList);
         return ApiResponse.ok(true);
     }
 
