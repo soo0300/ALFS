@@ -50,7 +50,7 @@ public class SupervisorController {
     }
 
     @PostMapping("/ocr/file")
-    public ApiResponse<FileIngredientResponse> getFileIngredient(@RequestParam("images") List<MultipartFile> multipartFile, @RequestBody OcrFileRequest request){
+    public ApiResponse<FileIngredientResponse> getFileIngredient(@RequestPart("images") List<MultipartFile> multipartFile, @RequestPart("OcrFileRequest") OcrFileRequest request){
 
         // s3에 이미지 등록
         List<String> imgUrls = new ArrayList<>();
@@ -72,7 +72,8 @@ public class SupervisorController {
         OcrFileDto dto = request.toDto(multipartFile.get(multipartFile.size()-1));
         List<String> response = supervisorService.getFileIngredient(dto);
         if(response.isEmpty()){
-            return ApiResponse.badRequest("인식된 원재료명이 없습니다.");
+//            return ApiResponse.badRequest("인식된 원재료명이 없습니다.");
+            log.debug("인식된 원재료명이 없습니다.");
         }
 
         FileIngredientResponse fileIngredientResponse = new FileIngredientResponse(imgUrls, response);
