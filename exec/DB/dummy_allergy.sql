@@ -9,7 +9,7 @@ insert into allergy(allergy_name, allergy_type) values ('돼지고기', 1);
 insert into allergy(allergy_name, allergy_type) values ('난류', 1);
 insert into allergy(allergy_name, allergy_type) values ('우유', 1);
 insert into allergy(allergy_name, allergy_type) values ('닭고기', 1);
-insert into allergy(allergy_name, allergy_type) values ('쇠고기', 1);
+insert into allergy(allergy_name, allergy_type) values ('소고기', 1);
 insert into allergy(allergy_name, allergy_type) values ('새우', 1);
 insert into allergy(allergy_name, allergy_type) values ('고등어', 1);
 insert into allergy(allergy_name, allergy_type) values ('홍합', 1);
