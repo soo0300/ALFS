@@ -28,7 +28,7 @@ public class AllergyController {
 
 
     @GetMapping()
-    public ApiResponse<Boolean> searchAllergyName(@PathVariable Long member_id,@PathVariable List<String> allergyNameList){
+    public ApiResponse<Boolean> checkAllergyName(@PathVariable Long member_id,@PathVariable List<String> allergyNameList){
         Boolean flag = allergyService.checkAllergyName(member_id, allergyNameList);
         return ApiResponse.ok(true);
     }
