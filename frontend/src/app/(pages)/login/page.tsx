@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, FormControl, Input } from "@chakra-ui/react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -13,7 +14,16 @@ type Inputs = {
 export default function Page() {
   const { register, handleSubmit } = useForm<Inputs>();
 
-  const handleLogin = () => {};
+  const handleLogin = async (e: any) => {
+    const identifier = e.id;
+    const password = e.password;
+
+    const result = await signIn("credentials", {
+      identifier,
+      password,
+    });
+    console.log(result);
+  };
   return (
     <div className="min-w-[650px] flex justify-center">
       <form onSubmit={handleSubmit(handleLogin)}>

@@ -3,12 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { Button, FormControl, FormHelperText, Input } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { signIn } from "next-auth/react";
 
 import Link from "next/link";
 import DaumPost from "@/app/_components/location/Daumpost";
 import ChoiceAllergy from "@/app/_components/choiceAllergy/ChoiceAllergy";
 
 import { Tag, TagLabel, TagLeftIcon, TagRightIcon, TagCloseButton } from "@chakra-ui/react";
+import { baseAxios } from "@/app/api/Api";
 
 type Inputs = {
   name: string;
@@ -84,8 +86,32 @@ export default function Page() {
   });
 
   //회원가입버튼
-  const handleSignup = (e: Inputs) => {
+  const handleSignup = async (e: any) => {
     console.log(e);
+    try {
+      const res = await baseAxios.post("/api/member", {
+        member: {
+          identifier: e.id,
+          password: e.password,
+          passwordCheck: e.passwordCheck,
+          name: e.name,
+          email: e.email,
+          phoneNumber: e.phone_number,
+          birth: e.birth,
+        },
+        address: {
+          address_1: e.address_1,
+          address_2: e.address_2,
+          alias: "집",
+        },
+        allergy: e.allergy_1,
+        hate: e.hate,
+      });
+      signIn(undefined, { callbackUrl: "/" });
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   //중복검사버튼
