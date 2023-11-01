@@ -32,8 +32,11 @@ public class ProductService {
         return savedProduct.getId();
     }
 
-    public Optional<Product> getProduct(Long id) {
-        return productRepository.findById(id);
+    public Optional<ProductResponse> getProduct(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        ProductImg img = productImgRepository.findByProductId(product.get().getId());
+        ProductResponse response = product.get().toResponse(img);
+        return Optional.ofNullable(response);
     }
 
     public Long setProduct(Long id, int price, int sale) {
@@ -54,7 +57,7 @@ public class ProductService {
                     .name(productList.get(i).getName())
                     .price(productList.get(i).getPrice())
                     .sale(productList.get(i).getSale())
-                    .img(img)
+                    .img(img.getImg_1())
                     .build();
 //            response.toGetProductListResponse(productList.get(i));
             productResponseList.add(getProductListResponse);
