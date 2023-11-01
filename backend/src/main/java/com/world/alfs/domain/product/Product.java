@@ -1,6 +1,7 @@
 package com.world.alfs.domain.product;
 
 
+import com.world.alfs.controller.product.response.GetProductListResponse;
 import com.world.alfs.controller.product.response.ProductResponse;
 import com.world.alfs.domain.product_img.ProductImg;
 import lombok.AccessLevel;
@@ -104,6 +105,17 @@ public class Product {
                 .content(content)
                 .detail_img(img.getImg_2())
                 .ingre_img(img.getImg_3())
+                .build();
+    }
+
+    public GetProductListResponse toListResponse(ProductImg img) {
+        return GetProductListResponse.builder()
+                .id(id)
+                .title(title)
+                .name(name)
+                .price(price)
+                .sale(sale)
+                .img(img.getImg_1())
                 .build();
     }
 
