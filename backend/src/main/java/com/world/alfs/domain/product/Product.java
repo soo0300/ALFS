@@ -44,7 +44,7 @@ public class Product {
     @Column()
     private String weight;
 
-    @Column()
+    @Column(columnDefinition = "TEXT")
     private String allergy;
 
     @Column()
@@ -59,7 +59,7 @@ public class Product {
     @Column()
     private int stock;
 
-    @Column()
+    @Column(columnDefinition = "TEXT")
     private String content;
 
 

@@ -7,17 +7,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AddMemberAllergyRequest {
-    private Long id;
-
     private Long memberId;
 
     private Long allergyId;
 
     public AddMemberAllergyDto toDto() {
         return AddMemberAllergyDto.builder()
-                .id(this.id)
                 .member_id(this.memberId)
-                .allergy_id(memberId)
+                .allergy_id(this.memberId)
                 .build();
     }
 }

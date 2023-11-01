@@ -19,4 +19,9 @@ public class Ingredient {
     @Column
     private String name;
 
+    @Builder
+    public Ingredient(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
