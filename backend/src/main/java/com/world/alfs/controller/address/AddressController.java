@@ -2,7 +2,6 @@ package com.world.alfs.controller.address;
 
 import com.world.alfs.controller.ApiResponse;
 import com.world.alfs.controller.address.request.AddAddressRequest;
-import com.world.alfs.controller.address.request.GetAddressRequest;
 import com.world.alfs.controller.address.request.SetDefaultRequest;
 import com.world.alfs.controller.address.response.GetAddressResponse;
 import com.world.alfs.service.address.AddressService;
@@ -21,9 +20,9 @@ import java.util.Optional;
 public class AddressController {
     private final AddressService addressService;
 
-    @GetMapping()
-    public ApiResponse<List<GetAddressResponse>> getAddress(@RequestBody GetAddressRequest getAddressRequest){
-        List<GetAddressResponse> address_list = addressService.getAddress(getAddressRequest.getId());
+    @GetMapping("/{id}")
+    public ApiResponse<List<GetAddressResponse>> getAddress(@PathVariable Long id){
+        List<GetAddressResponse> address_list = addressService.getAddress(id);
         return ApiResponse.ok(address_list);
     }
 

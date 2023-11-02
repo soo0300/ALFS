@@ -39,16 +39,15 @@ public class ProductService {
         return Optional.ofNullable(response);
     }
 
-    public Long setProduct(Long id, int price, int sale) {
-        Optional<Product> product = productRepository.findById(id);
-        product.get().setProduct(price,sale);
+    public Long setProduct(AddProductDto dto) {
+        Optional<Product> product = productRepository.findById(dto.getId());
+        product.get().setProduct(dto);
         return product.get().getId();
     }
 
     public List<GetProductListResponse> getAllProduct() {
         List<Product> productList = productRepository.findAll();
         List<GetProductListResponse> productResponseList = new ArrayList<>();
-        GetProductListResponse response = null;
         for(int i=0; i<productList.size(); i++){
             ProductImg img = productImgRepository.findByProductId(productList.get(i).getId());
             GetProductListResponse getProductListResponse = GetProductListResponse.builder()
@@ -59,15 +58,12 @@ public class ProductService {
                     .sale(productList.get(i).getSale())
                     .img(img.getImg_1())
                     .build();
-//            response.toGetProductListResponse(productList.get(i));
             productResponseList.add(getProductListResponse);
         }
         return productResponseList;
     }
 
     public Long deleteProduct(Long id) {
-        productRepository.deleteById(id);
-//        productImgRepository.deleteProductImgByProductId(id);
         productImgRepository.deleteById(id);
         return id;
 
