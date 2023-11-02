@@ -1,4 +1,4 @@
-package com.world.alfs.domain.manufacturing_allergy.repository;
+package com.world.alfs.domain.manufacturing_allergy;
 
 import com.world.alfs.domain.allergy.Allergy;
 import com.world.alfs.domain.product.Product;
