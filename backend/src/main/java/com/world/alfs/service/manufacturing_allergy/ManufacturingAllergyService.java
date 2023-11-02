@@ -21,7 +21,7 @@ public class ManufacturingAllergyService {
 
     public boolean getManuAllergy(GetManuAllergyDto dto) {
         // 회원 알러지 찾기
-        List<MemberAllergy> memberAllergyList = memberAllergyRepository.findByMemberIdentifier(dto.getMemberIdentifier());
+        List<MemberAllergy> memberAllergyList = memberAllergyRepository.findByMemberId(dto.getMemberId());
 
         // 알러지 id만 저장
         List<Long> allergyList = new ArrayList<>();
@@ -32,7 +32,7 @@ public class ManufacturingAllergyService {
         // 제조시설 알러지 테이블에서 해당 상품 중에서 회원 알러지에 해당하는 개수 조회
         int cnt = manufacturingAllergyRepository.findCountByProductAndAllergy(dto.getProductId(), allergyList);
 
-        return cnt > 0 ? true : false;
+        return cnt > 0;
     }
 
 }

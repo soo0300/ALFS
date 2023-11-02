@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface MemberAllergyRepository extends JpaRepository<MemberAllergy, Long> {
 
-    List<MemberAllergy> findByMemberIdentifier(String memberIdentifier);
+    List<MemberAllergy> findByMemberId(Long memberId);
 
 }

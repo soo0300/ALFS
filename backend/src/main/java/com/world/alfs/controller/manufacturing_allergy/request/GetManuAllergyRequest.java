@@ -9,18 +9,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetManuAllergyRequest {
 
-    private String memberIdentifier;
+    private Long memberId;
     private Long productId;
 
     @Builder
-    public GetManuAllergyRequest(String memberIdentifier, Long productId) {
-        this.memberIdentifier = memberIdentifier;
+    public GetManuAllergyRequest(Long memberId, Long productId) {
+        this.memberId = memberId;
         this.productId = productId;
     }
 
     public GetManuAllergyDto toDto() {
         return GetManuAllergyDto.builder()
-                .memberIdentifier(memberIdentifier)
+                .memberId(memberId)
                 .productId(productId)
                 .build();
     }

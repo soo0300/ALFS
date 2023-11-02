@@ -1,6 +1,5 @@
 package com.world.alfs.service.manufacturing_allergy.dto;
 
-import com.world.alfs.domain.manufacturing_allergy.ManufacturingAllergy;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -9,12 +8,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GetManuAllergyDto {
 
-    private String memberIdentifier;
+    private Long memberId;
     private Long productId;
 
     @Builder
-    public GetManuAllergyDto(String memberIdentifier, Long productId) {
-        this.memberIdentifier = memberIdentifier;
+    public GetManuAllergyDto(Long memberId, Long productId) {
+        this.memberId = memberId;
         this.productId = productId;
     }
     
