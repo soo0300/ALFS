@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="w-[200px] mr-[50px]">
           <p className="text-[30px] mb-[50px]">MY</p>
           <div className="w-full border-[1px] border-gray-300">
-            <a href="/mypage/order">
+            <Link href="/mypage/order">
               <Button
                 width={200}
                 height={50}
@@ -26,8 +26,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   주문내역 <AiOutlineRight />
                 </p>
               </Button>
-            </a>
-            <a href="/mypage/home">
+            </Link>
+            <Link href="/mypage/home">
               <Button
                 width={200}
                 height={50}
@@ -38,8 +38,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   배송지 관리 <AiOutlineRight />
                 </p>
               </Button>
-            </a>
-            <a href="/mypage/allergy">
+            </Link>
+            <Link href="/mypage/allergy">
               <Button
                 width={200}
                 height={50}
@@ -50,8 +50,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   알러지 관리 <AiOutlineRight />
                 </p>
               </Button>
-            </a>
-            <a href="/mypage/info">
+            </Link>
+            <Link href="/mypage/info">
               <Button
                 width={200}
                 height={50}
@@ -62,7 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   개인정보수정 <AiOutlineRight />
                 </p>
               </Button>
-            </a>
+            </Link>
           </div>
         </div>
 
