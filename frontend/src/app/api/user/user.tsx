@@ -73,3 +73,20 @@ export async function ChangeStatus(props: any) {
     console.error(e);
   }
 }
+
+export async function PlusAddress(props: any) {
+  console.log(props);
+  try {
+    const res = await baseAxios.post(`api/address/`, {
+      member_id: localStorage.getItem("id"),
+      address: {
+        address_1: props.address_1,
+        address_2: props.address_2,
+        alias: props.alias,
+      },
+    });
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
