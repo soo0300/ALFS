@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/next-js";
 
 export default function AllergyNotice(props: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
     <div>
       <button
@@ -24,6 +24,11 @@ export default function AllergyNotice(props: any) {
           <ModalBody>알러지 확인 체크</ModalBody>
 
           <ModalFooter>
+            <Button colorScheme="whatsapp" variant="outline" mr={3}>
+              <Link href={{ pathname: `/cart` }} colorScheme="whatsapp" variant="outline" mr={3}>
+                Move
+              </Link>
+            </Button>
             <Button colorScheme="whatsapp" variant="outline" mr={3} onClick={onClose}>
               Close
             </Button>

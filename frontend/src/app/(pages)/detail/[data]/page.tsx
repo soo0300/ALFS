@@ -29,21 +29,45 @@ type ProductData = {
   main_img: string;
 };
 
-type GetDetailProps = {
-  productData: ProductData;
-};
+export default function Page() {
+  const numId = Number(useParams().data);
+  const [productData, setProductData] = useState<any>(null);
+  useEffect(() => {
+    // 페이지가 로드될 때마다 스크롤을 맨 위로 이동시킴
+    window.scrollTo(0, 0);
+  }, [productData]);
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        const response: ProductData = await GetProductDetail(numId);
+        console.log("리스폰스", response);
+        setProductData(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-async function GetDetail({ productData }: GetDetailProps) {
+    fetchProductData();
+  }, [numId]);
   const [cnt, setCnt] = useState<number>(1);
-  const discount = Math.round(((productData.price - productData.sale) / productData.price) * 100);
-  const sale = new Intl.NumberFormat().format(productData.sale);
-  const fetchedprice = new Intl.NumberFormat().format(productData.price);
-  const formattedPrice = new Intl.NumberFormat().format(productData.sale * cnt);
+  if (!productData) {
+    return <div>Loading...</div>;
+  }
+  const discount = Math.round(((productData?.price - productData?.sale) / productData.price) * 100);
+  const sale = new Intl.NumberFormat().format(productData?.sale | 0);
+  const fetchedprice = new Intl.NumberFormat().format(productData?.price);
+  const formattedPrice = new Intl.NumberFormat().format(productData?.sale * cnt);
   const changeCount = (operator: string) => {
-    if (operator === "+") {
-      setCnt(cnt + 1);
-    } else if (operator === "-" && cnt > 1) {
-      setCnt(cnt - 1);
+    if (productData && productData?.stock) {
+      setCnt((prevCnt) => {
+        if (operator === "+" && prevCnt < productData.stock) {
+          return prevCnt + 1;
+        } else if (operator === "-" && prevCnt > 1) {
+          return prevCnt - 1;
+        } else {
+          return prevCnt;
+        }
+      });
     }
   };
   return (
@@ -170,31 +194,6 @@ async function GetDetail({ productData }: GetDetailProps) {
           />
         </div>
       </div>
-    </>
-  );
-}
-
-export default function Page() {
-  const numId = Number(useParams().data);
-  const [productData, setProductData] = useState<any>(null);
-  useEffect(() => {
-    const fetchProductData = async () => {
-      try {
-        const response: ProductData = await GetProductDetail(numId);
-        console.log("리스폰스", response);
-        setProductData(response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchProductData();
-  }, []);
-  return (
-    <>
-      <React.Suspense fallback={<div>Loading...</div>}>
-        <GetDetail productData={productData} />
-      </React.Suspense>
     </>
   );
 }
