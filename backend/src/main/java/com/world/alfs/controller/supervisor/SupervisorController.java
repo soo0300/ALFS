@@ -1,10 +1,10 @@
 package com.world.alfs.controller.supervisor;
 
 import com.world.alfs.controller.ApiResponse;
-import com.world.alfs.controller.member.request.LogoutRequest;
 import com.world.alfs.controller.supervisor.request.OcrFileRequest;
 import com.world.alfs.controller.supervisor.request.OcrUrlRequest;
 import com.world.alfs.controller.supervisor.request.SupervisorLoginRequest;
+import com.world.alfs.controller.supervisor.request.SupervisorLogoutRequest;
 import com.world.alfs.controller.supervisor.response.FileIngredientResponse;
 import com.world.alfs.controller.supervisor.response.SupervisorLoginResponse;
 import com.world.alfs.service.aws_s3.AwsS3Service;
