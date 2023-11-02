@@ -52,19 +52,14 @@ public class AllergyController {
         System.out.println(requestEntity.getBody());
 
         // HTTP POST 요청 보내기
-        ResponseEntity<ApiResponse> response =
-                restTemplate.postForEntity("http://localhost:8080/api/member_allergy",requestEntity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = restTemplate.postForEntity("http://localhost:8080/api/member_allergy",requestEntity, ApiResponse.class);
 
         //요청 응답 처리 부분
         if (response.getStatusCode().is2xxSuccessful()) {
-            // POST 요청이 성공하면 처리
-            // response.getBody()를 통해 응답 데이터에 접근 가능
-            System.out.println(0);
+            return ApiResponse.ok(dto);
+        }else{
+            return ApiResponse.badRequest("회원 알러지 등록에 실패했습니다.");
         }
-
-
-
-        return ApiResponse.ok(dto);
     }
 
     @GetMapping("/hate")
