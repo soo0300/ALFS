@@ -39,9 +39,10 @@ public class ProductService {
         return Optional.ofNullable(response);
     }
 
-    public Long setProduct(Long id, int price, int sale) {
-        Optional<Product> product = productRepository.findById(id);
-        product.get().setProduct(price,sale);
+    public Long setProduct(AddProductDto dto) {
+        Optional<Product> product = productRepository.findById(dto.getId());
+        System.out.println("식품이름: "+product.get().getName());
+        product.get().setProduct(dto);
         return product.get().getId();
     }
 
