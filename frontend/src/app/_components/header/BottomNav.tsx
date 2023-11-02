@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Menu, MenuButton, Button, MenuList } from "@chakra-ui/react";
+import Link from "next/link";
 
 type Props = {};
 
@@ -53,7 +54,7 @@ export default function BottomNav({}: Props) {
           {(menu || open) && (
             <div
               data-aos="fade-right"
-              className="top-[18px] absolute bg-white border-x-[1px] border-b-[1px] text-[12px] flex flex-col w-[150px]"
+              className="top-[18px] absolute bg-white border-x-[1px] border-b-[1px] text-[12px] flex flex-col w-[150px] z-10"
               onMouseEnter={handleMenu}
               onMouseLeave={handleMenuLeave}
             >
@@ -67,6 +68,9 @@ export default function BottomNav({}: Props) {
           )}
         </div>
         <div className="flex gap-[50px] justify-center items-center">
+          <Link href="/list">
+            <p className=" hover:text-green-500">전체상품</p>
+          </Link>
           <p className=" hover:text-green-500">신상품</p>
           <p className=" hover:text-green-500">베스트</p>
           <p className=" hover:text-green-500">대체상품</p>

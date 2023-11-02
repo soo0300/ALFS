@@ -1,8 +1,10 @@
 "use client";
 
-import { Button, FormControl, Input } from "@chakra-ui/react";
+import { UserLogin } from "@/app/api/user/user";
+import { Button, FormControl, Input, useToast } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -13,16 +15,22 @@ type Inputs = {
 
 export default function Page() {
   const { register, handleSubmit } = useForm<Inputs>();
+  const toast = useToast();
+  const router = useRouter();
 
   const handleLogin = async (e: any) => {
-    const identifier = e.id;
-    const password = e.password;
-
-    const result = await signIn("credentials", {
-      identifier,
-      password,
-    });
-    console.log(result);
+    const res = await UserLogin(e);
+    if (res === null) {
+      toast({
+        title: "잘못된 아이디 혹은 비밀번호 입니다.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      sessionStorage.setItem("id", res);
+      window.location.replace("/main");
+    }
   };
   return (
     <div className="min-w-[650px] flex justify-center">

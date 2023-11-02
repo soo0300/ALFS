@@ -12,7 +12,7 @@ export default function MiddleNav() {
       <div className="min-w-[1000px] flex items-center justify-between">
         <a href="/main">
           <div className="flex justify-center items-center">
-            <Image src={Logo} width={50} height={50} alt="" />
+            <Image src={Logo} width={50} height={50} alt="" priority />
             <p className="text-[30px] ml-[10px]">
               <b>ALFS</b>
             </p>
