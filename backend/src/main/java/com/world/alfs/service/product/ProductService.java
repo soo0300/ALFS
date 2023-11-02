@@ -41,7 +41,6 @@ public class ProductService {
 
     public Long setProduct(AddProductDto dto) {
         Optional<Product> product = productRepository.findById(dto.getId());
-        System.out.println("식품이름: "+product.get().getName());
         product.get().setProduct(dto);
         return product.get().getId();
     }
@@ -65,8 +64,6 @@ public class ProductService {
     }
 
     public Long deleteProduct(Long id) {
-        productRepository.deleteById(id);
-//        productImgRepository.deleteProductImgByProductId(id);
         productImgRepository.deleteById(id);
         return id;
 
