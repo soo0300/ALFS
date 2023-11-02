@@ -34,5 +34,5 @@ public class ManufacturingAllergyService {
 
         return cnt > 0 ? true : false;
     }
-    
+
 }
