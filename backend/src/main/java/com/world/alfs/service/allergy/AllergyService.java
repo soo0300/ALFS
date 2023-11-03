@@ -59,10 +59,15 @@ public class AllergyService {
                     .build();
             System.out.println("여기는 AllergyService  (member_id,allergy_id) "+dto.getMember_id() +" "+dto.getAllergy_id());
             list.add(dto);
-
         }
-
         return list;
     }
 
+    public List<Integer> getAllergyType(List<Long> memberAllergyList) {
+        List<Integer> list = new ArrayList<>();
+        for(Long memberAllergyId : memberAllergyList){
+            list.add(allergyRepository.findAllergyTypeById(memberAllergyId));
+        }
+        return list;
+    }
 }
