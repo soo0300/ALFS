@@ -22,14 +22,17 @@ public class GetProductListResponse {
 
     private String img;
 
+    private int filterCode;
+
     @Builder
-    public GetProductListResponse(Long id, String name, String title, int price, int sale, String img) {
+    public GetProductListResponse(Long id, String name, String title, int price, int sale, String img, int filterCode) {
         this.id = id;
         this.name = name;
         this.title = title;
         this.price = price;
         this.sale = sale;
         this.img = img;
+        this.filterCode = filterCode;
     }
 
     public GetProductListResponse toGetProductListResponse(Product product){
