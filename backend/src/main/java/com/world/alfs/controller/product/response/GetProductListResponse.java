@@ -1,10 +1,11 @@
 package com.world.alfs.controller.product.response;
 
 import com.world.alfs.domain.product.Product;
-import com.world.alfs.domain.product_img.ProductImg;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 
 @Data
@@ -22,10 +23,10 @@ public class GetProductListResponse {
 
     private String img;
 
-    private int filterCode;
 
+    private List<Integer> filterCode;
     @Builder
-    public GetProductListResponse(Long id, String name, String title, int price, int sale, String img, int filterCode) {
+    public GetProductListResponse(Long id, String name, String title, int price, int sale, String img, List<Integer> filterCode) {
         this.id = id;
         this.name = name;
         this.title = title;
@@ -44,5 +45,9 @@ public class GetProductListResponse {
                 .sale(product.getSale())
 //                .img(productImg)
                 .build();
+    }
+
+    public void setCode(List<Integer> filterCode) {
+        this.filterCode = filterCode;
     }
 }
