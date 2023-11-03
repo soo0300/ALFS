@@ -50,20 +50,11 @@ public class ProductService {
         List<GetProductListResponse> productResponseList = new ArrayList<>();
         for(int i=0; i<productList.size(); i++){
             ProductImg img = productImgRepository.findByProductId(productList.get(i).getId());
-            GetProductListResponse getProductListResponse = GetProductListResponse.builder()
-                    .id(productList.get(i).getId())
-                    .title(productList.get(i).getTitle())
-                    .name(productList.get(i).getName())
-                    .price(productList.get(i).getPrice())
-                    .sale(productList.get(i).getSale())
-                    .img(img.getImg_1())
-                    .build();
-            productResponseList.add(getProductListResponse);
-
+            productResponseList.add(productList.get(i).toListResponse(img));
             //step 1. product_id로 product_ingredient 로 [ingredient] 를 조회한다.
             //step 2. [ingredient] 로 [ingredient_allergy]의 allergy_id를 조회한다.
             //step 3. allergy_id와 동일하고 member_id가 같은 컬럼을 [member_allergy]에서 조회한다.
-            //step 3. 여기서 조회된(필터된) allergy_id를 가지고 [allergy]의 allergy_type을 반환한다.
+            //step 3. 여기서 조회된(필터된) allergy_id를 가지고 [allergy]의 allergy_type 을 반환한다.
             //step 4. response 에 allergy_type 을 반환한다.
 
         }
