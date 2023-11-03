@@ -33,6 +33,7 @@ export default function Page() {
         identifier: e.id,
         password: e.password,
         redirect: false,
+        // callbackUrl: "/main",
       });
       localStorage.setItem("id", res);
       router.push("/main");
