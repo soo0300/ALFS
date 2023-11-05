@@ -10,7 +10,8 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const res = await fetch("http://k9c204.p.ssafy.io:8080/api/member/login", {
+        console.log(2235235);
+        const res = await fetch("https://k9c204.p.ssafy.io/api/member/login", {
           method: "POST",
           body: JSON.stringify(credentials),
           headers: { "Content-Type": "application/json" },
@@ -29,6 +30,7 @@ const handler = NextAuth({
   ],
   pages: {
     error: "/main",
+    signIn: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
 });
