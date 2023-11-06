@@ -1,6 +1,8 @@
 package com.world.alfs.service.product;
 
 
+import com.world.alfs.common.exception.CustomException;
+import com.world.alfs.common.exception.ErrorCode;
 import com.world.alfs.controller.product.response.GetProductListResponse;
 import com.world.alfs.controller.product.response.ProductResponse;
 import com.world.alfs.domain.product.Product;
@@ -26,16 +28,19 @@ public class ProductService {
 
     public Long addProduct(AddProductDto dto) {
         Product product = dto.toEntity();
-        ProductImg productImg = dto.toImgEntity();
+        ProductImg productImg = dto.toImgEntity(product);
         Product savedProduct = productRepository.save(product);
         productImgRepository.save(productImg);
         return savedProduct.getId();
     }
 
-    public Optional<ProductResponse> getProduct(Long id) {
-        Optional<Product> product = productRepository.findById(id);
-        ProductImg img = productImgRepository.findByProductId(product.get().getId());
-        ProductResponse response = product.get().toResponse(img);
+    public Optional<ProductResponse> getProduct(Long id){
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        ProductImg img = productImgRepository.findByProductId(product.getId());
+        ProductResponse response = product.toResponse(img);
+
         return Optional.ofNullable(response);
     }
 
