@@ -46,11 +46,11 @@ public class SpecialController {
         return ApiResponse.ok(saveId);
     }
 
-//    @DeleteMapping("/{id}")
-//    public ApiResponse<Long> deleteProduct(@PathVariable Long id){
-//        Long deleteId = specialService.deleteProduct(id);
-//        return ApiResponse.ok(deleteId);
-//    }
+    @DeleteMapping("/{id}")
+    public ApiResponse<Long> deleteSpecial(@PathVariable Long id){
+        Long deleteId = specialService.deleteSpecial(id);
+        return ApiResponse.ok(deleteId);
+    }
 
 
 }

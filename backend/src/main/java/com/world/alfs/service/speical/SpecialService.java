@@ -70,9 +70,10 @@ public class SpecialService {
         return special.getId();
     }
 
-//    public Long deleteProduct(Long id){
-//
-//    }
+    public Long deleteSpecial(Long id){
+        specialRepository.deleteById(id);
+        return id;
+    }
 
 
 }
