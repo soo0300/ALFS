@@ -36,4 +36,9 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> created(String message, T data){
         return of(HttpStatus.CREATED, message, data);
     }
+
+    public static class of extends X {
+        public of(HttpStatus httpStatus, String s, String s1) {
+        }
+    }
 }
