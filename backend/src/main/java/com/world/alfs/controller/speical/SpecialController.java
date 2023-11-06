@@ -39,13 +39,13 @@ public class SpecialController {
         return ApiResponse.ok(saveSpecial);
     }
 
-//    @PatchMapping("/{id}")
-//    public ApiResponse<Long> setProduct(@PathVariable Long id, @RequestBody AddSpecialReqeust request){
-//        AddSpecialDto dto = request.toDto();
-//        Long saveId = specialService.setProduct(id, dto);
-//        return ApiResponse.ok(saveId);
-//    }
-//
+    @PatchMapping("/{id}")
+    public ApiResponse<Long> setSpecial(@PathVariable Long id, @RequestBody AddSpecialReqeust request){
+        AddSpecialDto dto = request.toDto();
+        Long saveId = specialService.setSpecial(id, dto);
+        return ApiResponse.ok(saveId);
+    }
+
 //    @DeleteMapping("/{id}")
 //    public ApiResponse<Long> deleteProduct(@PathVariable Long id){
 //        Long deleteId = specialService.deleteProduct(id);
