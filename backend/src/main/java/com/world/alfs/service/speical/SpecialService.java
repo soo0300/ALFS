@@ -1,5 +1,7 @@
 package com.world.alfs.service.speical;
 
+import com.world.alfs.common.exception.CustomException;
+import com.world.alfs.common.exception.ErrorCode;
 import com.world.alfs.controller.speical.response.GetSpecialResponse;
 import com.world.alfs.domain.product.Product;
 import com.world.alfs.domain.product.repository.ProductRepository;
@@ -49,10 +51,11 @@ public class SpecialService {
         return specialResponseList;
     }
 
-//    public Long getProduct(Long id){
-//
-//    }
-//
+    public GetSpecialResponse getSpecial(Long id){
+        Special special = specialRepository.findById(id).orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        return GetSpecialResponse.toGetSpecialListResponse(special);
+    }
+
 //    public Long setProduct(Long id, AddSpecialDto dto){
 //
 //    }
