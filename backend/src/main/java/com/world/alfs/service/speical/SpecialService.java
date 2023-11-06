@@ -2,6 +2,7 @@ package com.world.alfs.service.speical;
 
 import com.world.alfs.domain.product.Product;
 import com.world.alfs.domain.product.repository.ProductRepository;
+import com.world.alfs.domain.special.Special;
 import com.world.alfs.domain.special.repository.SpecialRepository;
 import com.world.alfs.domain.supervisor.Supervisor;
 import com.world.alfs.domain.supervisor.repository.SupervisorRepository;
@@ -21,13 +22,16 @@ public class SpecialService {
     private final ProductRepository productRepository;
     private final SupervisorRepository supervisorRepository;
 
-    public Long addSpecial(AddSpecialDto dto) {
-        Optional<Product> product = productRepository.findById(dto.getProductId());
-        Optional<Supervisor> supervisor = supervisorRepository.findById(dto.getSupervisorId());
+    public Long addSpecial(AddSpecialDto dto) throws Exception {
+        Product product = productRepository.findById(dto.getProductId())
+                .orElseThrow(()->new Exception("이벤트 상품을 등록할 상품이 없습니다."));
+        Supervisor supervisor = supervisorRepository.findById(dto.getSupervisorId())
+                .orElseThrow(()->new Exception("이벤트 상품을 등록할 관리자가 없습니다."));
 
-//        AddSpecialDto
+        Special special = dto.toEntity(product, supervisor);
+        specialRepository.save(special);
 
-        return null;
+        return special.getId();
     }
 
 //    public List<> getAllProduct(){
