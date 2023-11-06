@@ -14,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -46,13 +46,9 @@ public class SpecialService {
 
         List<Special> specialList = specialRepository.findAll();
 
-        List<GetSpecialResponse> specialResponseList = new ArrayList<>();
-        for (Special special : specialList) {
-            GetSpecialResponse specialResponse = GetSpecialResponse.toGetSpecialListResponse(special);
-            specialResponseList.add(specialResponse);
-        }
-
-        return specialResponseList;
+        return specialList.stream()
+                .map(GetSpecialResponse::toGetSpecialListResponse)
+                .collect(Collectors.toList());
     }
 
     public GetSpecialResponse getSpecial(Long id){
