@@ -27,8 +27,8 @@ public class SpecialController {
     }
 
     @GetMapping("/all")
-    public ApiResponse<List<GetSpecialResponse>> getAllProduct(){
-        List<GetSpecialResponse> specialList = specialService.getAllProduct();
+    public ApiResponse<List<GetSpecialResponse>> getAllSpecial(){
+        List<GetSpecialResponse> specialList = specialService.getAllSpecial();
         return ApiResponse.ok(specialList);
     }
 
