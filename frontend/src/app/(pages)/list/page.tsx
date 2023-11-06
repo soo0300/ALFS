@@ -17,17 +17,15 @@ async function GetListData() {
         <div className="grid grid-cols-3 mx-auto mt-[10px]">
           {response.map((item: any) => (
             <div key={item.id} className="w-[178px] h-[450px] ml-[44px]">
-              <Link href={{ pathname: `/detail/${item.id}` }}>
-                <Card
-                  name={item.name}
-                  image={item.img}
-                  id={item.id}
-                  title={item.title}
-                  price={item.price}
-                  sale={item.sale}
-                  delivery={item.delivery}
-                />
-              </Link>
+              <Card
+                name={item.name}
+                image={item.img}
+                id={item.id}
+                title={item.title}
+                price={item.price}
+                sale={item.sale}
+                delivery={item.delivery}
+              />
             </div>
           ))}
         </div>
