@@ -2,6 +2,7 @@ import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const handler = NextAuth({
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -28,23 +29,10 @@ const handler = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async session({ session, user }: any) {
-      // Send properties to the client, like an access_token and user id from a provider.
-
-      return session;
-    },
-    async signIn({ session, user }: any) {
-      // Send properties to the client, like an access_token and user id from a provider.
-
-      return session;
-    },
-  },
   pages: {
-    // error: "/main",
-    // signIn: "/login",
+    error: "/main",
+    signIn: "/login",
   },
-  secret: process.env.NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };
