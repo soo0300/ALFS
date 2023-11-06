@@ -7,17 +7,19 @@ import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { DeleteProduct } from "@/app/api/supervisor/supervisor";
 import PropsModal from "@/app/_components/modal/PropsModal";
+import { useSession } from "next-auth/react";
 
 type Props = {};
 
 export default function Page({}: Props) {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const { data: session } = useSession();
 
   const getData = async () => {
-    const res = await GetList();
-    setData(res);
-    setFilteredData(res); // Set initial data and filtered data to be the same
+    // const res = await GetList(session?.user?.name);
+    // setData(res);
+    // setFilteredData(res); // Set initial data and filtered data to be the same
   };
 
   const handleSearch = (e: any) => {
@@ -36,7 +38,9 @@ export default function Page({}: Props) {
   };
 
   useEffect(() => {
-    getData();
+    if (session?.user) {
+      getData();
+    }
   }, []);
 
   return (
