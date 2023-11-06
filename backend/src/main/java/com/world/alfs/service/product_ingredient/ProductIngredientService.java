@@ -4,6 +4,7 @@ package com.world.alfs.service.product_ingredient;
 import com.world.alfs.controller.ApiResponse;
 import com.world.alfs.domain.ingredient.Ingredient;
 import com.world.alfs.domain.ingredient.repository.IngredientRepository;
+import com.world.alfs.domain.product.Product;
 import com.world.alfs.domain.product.repository.ProductRepository;
 import com.world.alfs.domain.product_ingredient.ProductIngredient;
 import com.world.alfs.domain.product_ingredient.repostiory.ProductIngredientRepository;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -33,7 +35,9 @@ public class ProductIngredientService {
     }
 
     public List<Long> getAllIngredientId(Long productId) {
-        List<ProductIngredient> list = productIngredientRepository.findIngredientsByProduct(productId);
+        Optional<Product> product = productRepository.findById(productId);
+        System.out.println(product.get().getId());
+        List<ProductIngredient> list = productIngredientRepository.findAllByProduct(product.get());
         List<Long> response = new ArrayList<>();
         for(int i=0; i<list.size(); i++){
             response.add(list.get(i).getIngredient().getId());
