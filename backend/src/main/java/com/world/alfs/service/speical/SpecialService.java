@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -29,6 +30,11 @@ public class SpecialService {
     public Long addSpecial(AddSpecialDto dto) {
         Product product = productRepository.findById(dto.getProductId()).orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         Supervisor supervisor = supervisorRepository.findById(dto.getSupervisorId()).orElseThrow(()->new CustomException(ErrorCode.SUPERVISOR_NOT_FOUND));
+
+        Optional<Special> existingSpecial = specialRepository.findById(dto.getProductId());
+        if (existingSpecial.isPresent()) {
+            throw new CustomException(ErrorCode.DUPLICATE_SPECIAL_ID);
+        }
 
         Special special = dto.toEntity(product, supervisor);
         specialRepository.save(special);
