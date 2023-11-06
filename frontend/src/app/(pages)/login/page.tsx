@@ -1,6 +1,6 @@
 "use client";
 
-import { UserLogin } from "@/app/api/user/user";
+import { UserLogin } from "@/app/apis/user/user";
 import { Button, FormControl, Input, useToast } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -29,12 +29,12 @@ export default function Page() {
         isClosable: true,
       });
     } else {
-      // await signIn("credentials", {
-      //   identifier: e.id,
-      //   password: e.password,
-      //   userId: res,
-      //   redirect: false,
-      // });
+      await signIn("credentials", {
+        identifier: e.id,
+        password: e.password,
+        userId: res,
+        redirect: false,
+      });
 
       router.push("/");
     }

@@ -4,9 +4,10 @@ import "./globals.css";
 import localFont from "next/font/local";
 import Nav from "./_components/header/Nav";
 import Footer from "./_components/footer/Footer";
-import { getServerSession } from "next-auth";
-import { SessionProviders } from "./SessionProvider";
+import { getServerSession } from "next-auth/next";
+
 import { Providers } from "./providers";
+import SessionProvider from "./api/auth/[...nextauth]/SessionProvider";
 
 // Font files can be colocated inside of `app`
 const myFont = localFont({
@@ -26,13 +27,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body className={myFont.className}>
-        <SessionProviders>
+        <SessionProvider session={session}>
           <Providers>
             <Nav></Nav>
             {children}
             <Footer />
           </Providers>
-        </SessionProviders>
+        </SessionProvider>
       </body>
     </html>
   );
