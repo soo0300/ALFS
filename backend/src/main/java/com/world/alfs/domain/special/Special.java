@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Special extends TimeBaseEntity {
+public class Special {
 
     @Id
     private Long id;
