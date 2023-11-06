@@ -18,6 +18,7 @@ const handler = NextAuth({
         });
         const user = await res.json();
         console.log(user);
+        console.log(process.env.NEXTAUTH_URL);
         user.name = credentials.userId;
         // If no error and we have user data, return it
         if (res.ok && user) {
@@ -29,6 +30,11 @@ const handler = NextAuth({
   ],
   callbacks: {
     async session({ session, user }: any) {
+      // Send properties to the client, like an access_token and user id from a provider.
+
+      return session;
+    },
+    async signIn({ session, user }: any) {
       // Send properties to the client, like an access_token and user id from a provider.
 
       return session;
