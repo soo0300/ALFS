@@ -26,11 +26,11 @@ public class SpecialService {
     private final ProductRepository productRepository;
     private final SupervisorRepository supervisorRepository;
 
-    public Long addSpecial(AddSpecialDto dto) throws Exception {
+    public Long addSpecial(AddSpecialDto dto) {
         Product product = productRepository.findById(dto.getProductId())
-                .orElseThrow(()->new Exception("이벤트 상품을 등록할 상품이 없습니다."));
+                .orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         Supervisor supervisor = supervisorRepository.findById(dto.getSupervisorId())
-                .orElseThrow(()->new Exception("이벤트 상품을 등록할 관리자가 없습니다."));
+                .orElseThrow(()->new CustomException(ErrorCode.SUPERVISOR_NOT_FOUND));
 
         Special special = dto.toEntity(product, supervisor);
         specialRepository.save(special);
