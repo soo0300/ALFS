@@ -1,5 +1,6 @@
 package com.world.alfs.controller.speical;
 
+import com.world.alfs.controller.ApiResponse;
 import com.world.alfs.controller.speical.request.AddSpecialReqeust;
 import com.world.alfs.service.speical.SpecialService;
 import com.world.alfs.service.speical.dto.AddSpecialDto;
@@ -16,9 +17,10 @@ public class SpecialController {
     private final SpecialService specialService;
 
     @PostMapping()
-    public Long addSpecial(@RequestBody AddSpecialReqeust request){
+    public ApiResponse<Long> addSpecial(@RequestBody AddSpecialReqeust request) throws Exception {
         AddSpecialDto dto = request.toDto();
-        return specialService.addSpecial(dto);
+        Long id = specialService.addSpecial(dto);
+        return ApiResponse.ok(id);
     }
 
 //    @GetMapping("/all")
