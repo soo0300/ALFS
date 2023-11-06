@@ -27,10 +27,8 @@ public class SpecialService {
     private final SupervisorRepository supervisorRepository;
 
     public Long addSpecial(AddSpecialDto dto) {
-        Product product = productRepository.findById(dto.getProductId())
-                .orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-        Supervisor supervisor = supervisorRepository.findById(dto.getSupervisorId())
-                .orElseThrow(()->new CustomException(ErrorCode.SUPERVISOR_NOT_FOUND));
+        Product product = productRepository.findById(dto.getProductId()).orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        Supervisor supervisor = supervisorRepository.findById(dto.getSupervisorId()).orElseThrow(()->new CustomException(ErrorCode.SUPERVISOR_NOT_FOUND));
 
         Special special = dto.toEntity(product, supervisor);
         specialRepository.save(special);
@@ -56,10 +54,16 @@ public class SpecialService {
         return GetSpecialResponse.toGetSpecialListResponse(special);
     }
 
-//    public Long setProduct(Long id, AddSpecialDto dto){
-//
-//    }
-//
+    public Long setSpecial(Long id, AddSpecialDto dto){
+
+        Product product = productRepository.findById(dto.getProductId()).orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        Supervisor supervisor = supervisorRepository.findById(dto.getSupervisorId()).orElseThrow(()->new CustomException(ErrorCode.SUPERVISOR_NOT_FOUND));
+        Special special= specialRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        special.setSpecial(dto, product, supervisor);
+        return special.getId();
+    }
+
 //    public Long deleteProduct(Long id){
 //
 //    }
