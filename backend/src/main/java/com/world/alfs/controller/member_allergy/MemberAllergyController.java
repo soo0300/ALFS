@@ -20,13 +20,12 @@ import java.util.List;
 public class MemberAllergyController {
     private final MemberAllergyService memberAllergyService;
     @PostMapping()
-    public ApiResponse<Long> addMemberAllergy(@RequestBody List<AddMemberAllergyDto> request){
+    public void addMemberAllergy(@RequestBody List<AddMemberAllergyDto> request){
         System.out.println("redirect 성공하셨습니다: member_allergy");
         for(AddMemberAllergyDto dto : request){
             System.out.print(dto.getAllergy_id());
             memberAllergyService.addMemberAllergy(dto);
         }
-        return ApiResponse.ok(1L);
     }
 
 
