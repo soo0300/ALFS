@@ -30,7 +30,7 @@ public class AllergyController {
         return ApiResponse.ok(response);
     }
 
-    @GetMapping("/check/{memberId}/{isAllergy}")
+    @PostMapping("/check/{memberId}/{isAllergy}")
     public ApiResponse<List<AddMemberAllergyDto>> checkAllergyName(@RequestBody List<String> list, @PathVariable Long memberId, @PathVariable int isAllergy) {
         //allervyNameList을 매개변수로 받아오기
         List<AddMemberAllergyDto> dto = allergyService.checkAllergyName(memberId, list, isAllergy);
