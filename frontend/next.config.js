@@ -1,4 +1,7 @@
-module.exports = {
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
   output: "standalone",
   images: {
     domains: ["product-image.kurly.com", "img-cf.kurly.com"], // 이미지를 가져올 도메인을 추가해주세요.
@@ -12,3 +15,5 @@ module.exports = {
     ],
   },
 };
+
+module.exports = nextConfig;

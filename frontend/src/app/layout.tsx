@@ -6,6 +6,7 @@ import Nav from "./_components/header/Nav";
 import Footer from "./_components/footer/Footer";
 
 import { Providers } from "./providers";
+import SessionProvider from "./api/auth/[...nextauth]/SessionProvider";
 
 // Font files can be colocated inside of `app`
 const myFont = localFont({
