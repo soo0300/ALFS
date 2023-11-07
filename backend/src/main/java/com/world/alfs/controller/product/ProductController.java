@@ -80,7 +80,6 @@ public class ProductController {
             System.out.println("step3 pass " + memberAllergy_allergy_id_list.size());
 
             for (int a = 0; a < memberAllergy_allergy_id_list.size(); a++) {
-//                compare_allergy.add(allergyService.getAllergyName(memberAllergy_allergy_id_list.get(a)));
                 System.out.print(memberAllergy_allergy_id_list.get(a) + " ");
             }
             System.out.println();
@@ -101,15 +100,8 @@ public class ProductController {
             // allergy 테이블에서 member_allergy_list 에 해당하는 allergy_name과
             // ingredient 테이블에서 product_ingredient_list 에 해당하는 name와 일치한다면,
             // allergy 테이블에서 allergy_id를 저장한 후, allergy_type 를 가졍한다.
+            // 여기서 조회된(필터된) allergy_id를 가지고 [allergy]의 allergy_type 을 반환한다.
 
-            //step 3. 여기서 조회된(필터된) allergy_id를 가지고 [allergy]의 allergy_type 을 반환한다.
-//            System.out.println("step4 pass");
-//            for(int a=0; a<member_allergy_list.size(); a++){
-//                System.out.print(member_allergy_list.get(a));
-//            }
-//            System.out.println();
-
-            //step 4. response 에 allergy_type 을 세팅한다.
             response.get(i).setCode(FilterCode);
         }
 

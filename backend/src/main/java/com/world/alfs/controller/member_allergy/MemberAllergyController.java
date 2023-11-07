@@ -1,7 +1,6 @@
 package com.world.alfs.controller.member_allergy;
 
 import com.world.alfs.controller.ApiResponse;
-import com.world.alfs.controller.member_allergy.request.AddMemberAllergyRequest;
 import com.world.alfs.service.member_allergy.MemberAllergyService;
 import com.world.alfs.service.member_allergy.dto.AddMemberAllergyDto;
 import lombok.RequiredArgsConstructor;
