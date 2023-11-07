@@ -41,7 +41,7 @@ public class AllergyService {
     public List<AddMemberAllergyDto> checkAllergyName(Long memberId, List<String> NameList, int isAllergy) {
         List<AddMemberAllergyDto>list = new ArrayList<>();
         for(int i=0; i<NameList.size(); i++){
-            Allergy allergy = allergyRepository.findByAllergyNameAndAllergyType(NameList.get(i),isAllergy);
+            Optional<Allergy> allergy = allergyRepository.findByAllergyNameAndAllergyType(NameList.get(i),isAllergy);
             if(allergy ==null){
                 Allergy addAllergy = Allergy.builder()
                         .allergyName(NameList.get(i))
