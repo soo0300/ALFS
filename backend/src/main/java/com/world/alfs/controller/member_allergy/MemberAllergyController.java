@@ -27,7 +27,6 @@ public class MemberAllergyController {
             System.out.print(dto.getAllergy_id());
             memberAllergyService.addMemberAllergy(dto);
         }
-        System.out.println("끝");
         return ApiResponse.ok(1L);
     }
 
