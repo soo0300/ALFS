@@ -17,9 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,7 +54,7 @@ public class ProductController {
                 compare_ingredient.add(product_ingredient_list.get(a).getName());
             }
             List<Long> memberAllergy_allergy_id_list = memberAllergyService.getFilteredAllergyId(memberId);
-            List<Integer> FilterCode = new ArrayList<>();
+            Set<Integer> FilterCode = new HashSet<>();
             for (int a = 0; a < memberAllergy_allergy_id_list.size(); a++) {
                 Allergy allergy = allergyService.getAllergy(memberAllergy_allergy_id_list.get(a));
                 for (int b = 0; b < compare_ingredient.size(); b++) {
@@ -65,6 +63,7 @@ public class ProductController {
                     }
                 }
             }
+            //FilterCode 중복 제거
             response.get(i).setCode(FilterCode);
         }
         return ApiResponse.ok(response);
