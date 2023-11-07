@@ -33,7 +33,7 @@ public class Member {
     private String phoneNumber;
 
     @Column
-    private boolean activate;
+    private Boolean activate;
 
     @Builder
     public Member(Long id, String name, String identifier, String password, String birth, int point, String email, String phoneNumber, boolean activate) {
