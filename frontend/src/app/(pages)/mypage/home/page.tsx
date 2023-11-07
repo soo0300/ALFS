@@ -22,29 +22,28 @@ import { useSession } from "next-auth/react";
 import PropsModal from "@/app/_components/modal/PropsModal";
 
 type Inputs = {
-  id: number;
+  id: string;
   address_1: string;
   address_2: string;
   alias: string;
 };
 
 export default function Page() {
-  const { data: session } = useSession();
-
   const toast = useToast();
   const [myAddress, setMyAddress] = useState([]);
+  const [userId, setUserId] = useState<any>("null");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { register, handleSubmit, watch, setValue } = useForm<Inputs>();
 
-  const GetAddress = async () => {
-    const res = await AddressAll(session?.user?.name);
+  const GetAddress = async (id: any) => {
+    const res = await AddressAll(id);
     if (res) {
       setMyAddress(res.data.data);
       console.log(res);
     }
   };
   const changeStatus = async (id: any) => {
-    const data = [Number(session?.user?.name), id];
+    const data = [Number(userId), id];
     const res = await ChangeStatus(data);
     toast({
       title: "기본 배송지가 변경되었습니다.",
@@ -63,19 +62,19 @@ export default function Page() {
 
   const handleAddress = async (e: any) => {
     const data = {
-      member_id: session?.user?.name,
+      member_id: userId,
       address_1: e.address_1,
       address_2: e.address_2,
       alias: e.alias,
     };
     const res = await PlusAddress(data);
-    GetAddress();
+    GetAddress(userId);
   };
 
   useEffect(() => {
-    if (session?.user) {
-      GetAddress();
-    }
+    const prevId = localStorage.getItem("id");
+    GetAddress(prevId);
+    setUserId(prevId);
   }, []);
 
   return (

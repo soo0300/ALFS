@@ -14,7 +14,6 @@ type Props = {};
 export default function Page({}: Props) {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const { data: session } = useSession();
 
   const getData = async () => {
     // const res = await GetList(session?.user?.name);
@@ -37,11 +36,11 @@ export default function Page({}: Props) {
     return <PropsModal props="상품이 삭제되었습니다."></PropsModal>;
   };
 
-  useEffect(() => {
-    if (session?.user) {
-      getData();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (session?.user) {
+  //     getData();
+  //   }
+  // }, []);
 
   return (
     <div>
