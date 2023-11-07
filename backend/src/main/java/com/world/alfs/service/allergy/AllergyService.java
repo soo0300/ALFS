@@ -72,4 +72,14 @@ public class AllergyService {
 
         return list;
     }
+
+    public String getAllergyName(Long allergyId) {
+        Optional<Allergy> allergy = allergyRepository.findById(allergyId);
+        return allergy.get().getAllergyName();
+    }
+
+    public Allergy getAllergy(Long allergyId) {
+        Optional<Allergy> allergy = allergyRepository.findById(allergyId);
+        return allergy.get();
+    }
 }
