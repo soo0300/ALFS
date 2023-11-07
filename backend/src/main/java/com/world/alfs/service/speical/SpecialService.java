@@ -10,6 +10,7 @@ import com.world.alfs.domain.special.repository.SpecialRepository;
 import com.world.alfs.domain.supervisor.Supervisor;
 import com.world.alfs.domain.supervisor.repository.SupervisorRepository;
 import com.world.alfs.service.speical.dto.AddSpecialDto;
+import com.world.alfs.service.speical.dto.DeleteSpecialDto;
 import com.world.alfs.service.speical.dto.SetSpecialDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -73,7 +74,16 @@ public class SpecialService {
         return special.getId();
     }
 
-    public Long deleteSpecial(Long id){
+    public Long deleteSpecial(Long id, DeleteSpecialDto dto){
+
+        // 이벤트 특가상품이 존재하는지 확인
+        Special special= specialRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        // id에 해당하는 이벤트 특가상품의 관리자와 dto에 보내준 관리자 id와 일치하는지 비교
+                if (!special.getSupervisor().getId().equals(dto.getSupervisorId())) {
+            throw new CustomException(ErrorCode.SUPERVISOR_ID_MISMATCH);
+        }
+
         specialRepository.deleteById(id);
         return id;
     }
