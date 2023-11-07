@@ -1,4 +1,4 @@
-import NextAuth from "next-auth/next";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const handler = NextAuth({
@@ -17,7 +17,6 @@ const handler = NextAuth({
           headers: { "Content-Type": "application/json" },
         });
         const user = await res.json();
-        console.log(user);
         user.name = credentials.userId;
         // If no error and we have user data, return it
         if (res.ok && user) {
@@ -27,17 +26,6 @@ const handler = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async session({ session, user }: any) {
-      // Send properties to the client, like an access_token and user id from a provider.
-
-      return session;
-    },
-  },
-  pages: {
-    // error: "/main",
-    // signIn: "/login",
-  },
   secret: process.env.NEXTAUTH_SECRET,
 });
 
