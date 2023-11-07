@@ -2,9 +2,11 @@ package com.world.alfs.controller.speical;
 
 import com.world.alfs.controller.ApiResponse;
 import com.world.alfs.controller.speical.request.AddSpecialReqeust;
+import com.world.alfs.controller.speical.request.SetSpecialReqeust;
 import com.world.alfs.controller.speical.response.GetSpecialResponse;
 import com.world.alfs.service.speical.SpecialService;
 import com.world.alfs.service.speical.dto.AddSpecialDto;
+import com.world.alfs.service.speical.dto.SetSpecialDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +42,8 @@ public class SpecialController {
     }
 
     @PatchMapping("/{id}")
-    public ApiResponse<Long> setSpecial(@PathVariable Long id, @RequestBody AddSpecialReqeust request){
-        AddSpecialDto dto = request.toDto();
+    public ApiResponse<Long> setSpecial(@PathVariable Long id, @RequestBody SetSpecialReqeust request){
+        SetSpecialDto dto = request.toDto();
         Long saveId = specialService.setSpecial(id, dto);
         return ApiResponse.ok(saveId);
     }
