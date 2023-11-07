@@ -2,10 +2,12 @@ package com.world.alfs.controller.speical;
 
 import com.world.alfs.controller.ApiResponse;
 import com.world.alfs.controller.speical.request.AddSpecialReqeust;
+import com.world.alfs.controller.speical.request.DeleteSpecialReqeust;
 import com.world.alfs.controller.speical.request.SetSpecialReqeust;
 import com.world.alfs.controller.speical.response.GetSpecialResponse;
 import com.world.alfs.service.speical.SpecialService;
 import com.world.alfs.service.speical.dto.AddSpecialDto;
+import com.world.alfs.service.speical.dto.DeleteSpecialDto;
 import com.world.alfs.service.speical.dto.SetSpecialDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,8 +51,9 @@ public class SpecialController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<Long> deleteSpecial(@PathVariable Long id){
-        Long deleteId = specialService.deleteSpecial(id);
+    public ApiResponse<Long> deleteSpecial(@PathVariable Long id, @RequestBody DeleteSpecialReqeust request){
+        DeleteSpecialDto dto = request.toDto();
+        Long deleteId = specialService.deleteSpecial(id, dto);
         return ApiResponse.ok(deleteId);
     }
 
