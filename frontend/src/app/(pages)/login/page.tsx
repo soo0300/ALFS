@@ -29,14 +29,8 @@ export default function Page() {
         isClosable: true,
       });
     } else {
-      await signIn("credentials", {
-        identifier: e.id,
-        password: e.password,
-        userId: res,
-        redirect: false,
-      });
-
-      router.push("/");
+      localStorage.setItem("id", res);
+      window.location.replace("/");
     }
   };
   return (

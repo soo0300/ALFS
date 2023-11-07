@@ -92,9 +92,9 @@ export default function Page() {
       duration: 3000,
       isClosable: true,
     });
-    // setTimeout(() => {
-    //   window.location.replace("/login");
-    // }, 2000);
+    setTimeout(() => {
+      window.location.replace("/login");
+    }, 2000);
   };
 
   //중복검사버튼
