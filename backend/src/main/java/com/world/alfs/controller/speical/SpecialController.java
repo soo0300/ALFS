@@ -4,6 +4,7 @@ import com.world.alfs.controller.ApiResponse;
 import com.world.alfs.controller.speical.request.AddSpecialReqeust;
 import com.world.alfs.controller.speical.request.DeleteSpecialReqeust;
 import com.world.alfs.controller.speical.request.SetSpecialReqeust;
+import com.world.alfs.controller.speical.response.GetSpecialListResponse;
 import com.world.alfs.controller.speical.response.GetSpecialResponse;
 import com.world.alfs.service.speical.SpecialService;
 import com.world.alfs.service.speical.dto.AddSpecialDto;
