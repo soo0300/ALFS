@@ -19,8 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.world.alfs.common.exception.ErrorCode.ALLERGY_NOT_FOUND;
-import static com.world.alfs.common.exception.ErrorCode.PRODUCT_NOT_FOUND;
+import static com.world.alfs.common.exception.ErrorCode.*;
 
 @Transactional
 @Service
@@ -60,12 +59,18 @@ public class ManufacturingAllergyService {
             Allergy allergy = allergyRepository.findByAllergyName(addManuAllergyDto.getAllergyName())
                     .orElseThrow(() -> new CustomException(ALLERGY_NOT_FOUND));
 
-            ManufacturingAllergy manufacturingAllergy = ManufacturingAllergy.builder()
-                    .product(product)
-                    .allergy(allergy)
-                    .build();
+            boolean exists = manufacturingAllergyRepository.existsByProductAndAllergy(product, allergy);
 
-            manufacturingAllergyList.add(manufacturingAllergy);
+            if (exists) {
+                throw new CustomException(DUPLICATE_MANUFACTURING_ALLERGY);
+            } else {
+                ManufacturingAllergy manufacturingAllergy = ManufacturingAllergy.builder()
+                        .product(product)
+                        .allergy(allergy)
+                        .build();
+
+                manufacturingAllergyList.add(manufacturingAllergy);
+            }
         }
 
         manufacturingAllergyRepository.saveAll(manufacturingAllergyList);
