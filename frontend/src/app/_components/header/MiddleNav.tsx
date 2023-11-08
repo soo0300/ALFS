@@ -19,6 +19,7 @@ import {
   PopoverCloseButton,
   PopoverAnchor,
 } from "@chakra-ui/react";
+import MiddleIcon from "./MiddleIcon";
 
 export default function MiddleNav() {
   return (
@@ -42,27 +43,7 @@ export default function MiddleNav() {
           </InputGroup>
         </div>
 
-        <div className="flex gap-[20px]">
-          <Popover>
-            <PopoverTrigger>
-              <Button width="40px" height="40px">
-                <AiOutlineEnvironment className="min-w-[40px] min-h-[40px]" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverArrow />
-              <PopoverCloseButton />
-              <PopoverHeader>Confirmation!</PopoverHeader>
-              <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
-            </PopoverContent>
-          </Popover>
-
-          {/* </Link> */}
-          <FaRegHeart className="min-w-[40px] h-[40px]" />
-          <Link href={{ pathname: `/cart` }}>
-            <AiOutlineShoppingCart className="min-w-[40px] h-[40px]" />
-          </Link>
-        </div>
+        <MiddleIcon></MiddleIcon>
       </div>
     </div>
   );
