@@ -21,6 +21,7 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 상품을 찾을 수 없습니다."),
     INGREDIENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 원재료가 존재하지 않습니다."),
     SUPERVISOR_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 관리자를 찾을 수 없습니다."),
+    ALLERGY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 알러지 원재료를 찾을 수 없습니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_SPECIAL_ID(HttpStatus.CONFLICT, "상품 아이디가 중복됩니다."),
