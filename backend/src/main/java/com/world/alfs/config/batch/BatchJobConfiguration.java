@@ -27,7 +27,7 @@ public class BatchJobConfiguration {
 
     private static final String JOB_NAME = "jpaJob";
     private static final String STEP_NAME = "jpaStep";
-    private static final int CHUNK_SIZE = 10;
+    private static final int CHUNK_SIZE = 3;
 
     @Bean
     public Job jpaJob(){
