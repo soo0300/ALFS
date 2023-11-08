@@ -40,7 +40,7 @@ export default function BottomNav({}: Props) {
     setMenu(false);
   };
   return (
-    <div className="min-w-[1000px] h-[50px] flex justify-center items-center border-b-2">
+    <div className="min-w-[1000px] h-[50px] flex justify-center items-center border-b-2 z-[1] bg-white sticky top-0">
       <div className="w-[1000px] flex">
         <div className="flex w-[200px] flex-col relative">
           <div
@@ -54,16 +54,18 @@ export default function BottomNav({}: Props) {
           {(menu || open) && (
             <div
               data-aos="fade-right"
-              className="top-[18px] absolute bg-white border-x-[1px] border-b-[1px] text-[12px] flex flex-col w-[150px] z-10"
+              className="top-[18px] absolute bg-white  border-b-[2px] text-[12px] flex flex-col w-[150px] z-10"
               onMouseEnter={handleMenu}
               onMouseLeave={handleMenuLeave}
             >
-              <p className="mt-[24px]"></p>
-              {category.map((item) => (
-                <p key={item.idx} className="hover:text-green-500 ml-[10px] my-[10px]">
-                  {item.title}
-                </p>
-              ))}
+              <p className="mt-[18px]"></p>
+              <div className="border-x-[2px]">
+                {category.map((item) => (
+                  <p key={item.idx} className="hover:text-green-500 ml-[10px] my-[10px]">
+                    {item.title}
+                  </p>
+                ))}
+              </div>
             </div>
           )}
         </div>
