@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.world.alfs.common.exception.ErrorCode.ALLERGY_NOT_FOUND;
+import static com.world.alfs.common.exception.ErrorCode.MEMBER_NOT_FOUND;
+
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -27,13 +30,15 @@ public class MemberAllergyService {
     private final MemberRepository memberRepository;
 
     public Long addMemberAllergy(AddMemberAllergyDto dto) {
-        Optional<Member> member = memberRepository.findById(dto.getMember_id());
-        Optional<Allergy> allergy = allergyRepository.findById(dto.getAllergy_id());
+        Member member = memberRepository.findById(dto.getMember_id())
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+        Allergy allergy = allergyRepository.findById(dto.getAllergy_id())
+                .orElseThrow(() -> new CustomException(ALLERGY_NOT_FOUND));
 
         boolean exists = memberAllergyRepository.existsByMemberIdAndAllergyId(dto.getMember_id(), dto.getAllergy_id());
 
         if (!exists) {
-            MemberAllergy memberAllergy = dto.toEntity(member.get(),allergy.get());
+            MemberAllergy memberAllergy = dto.toEntity(member,allergy);
             MemberAllergy savedMemberAllergy = memberAllergyRepository.save(memberAllergy);
 
             return savedMemberAllergy.getId();
