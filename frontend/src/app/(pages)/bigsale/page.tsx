@@ -1,6 +1,6 @@
 'use client'
 
-import { GetBigSaleList } from '@/app/apis/bigsalelist/BigSaleList'
+import { GetBigSaleList } from '@/app/api/bigsalelist/BigSaleList'
 import React, { useEffect, useState } from 'react'
 import NoContent from '@/app/_components/common/NoContent';
 import BigSaleList from '@/app/_components/bigsalecard/BigSaleList';
