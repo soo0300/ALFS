@@ -57,8 +57,8 @@ public class ManufacturingAllergyService {
                 .orElseThrow(() ->  new CustomException(PRODUCT_NOT_FOUND));
 
         for (AddManuAllergyDto addManuAllergyDto : dtoList) {
-            Allergy allergy = allergyRepository.findByAllergyName(addManuAllergyDto.getAllergyName());
-                    //.orElseThrow(() -> new CustomException(ALLERGY_NOT_FOUND));
+            Allergy allergy = allergyRepository.findByAllergyName(addManuAllergyDto.getAllergyName())
+                    .orElseThrow(() -> new CustomException(ALLERGY_NOT_FOUND));
 
             ManufacturingAllergy manufacturingAllergy = ManufacturingAllergy.builder()
                     .product(product)
