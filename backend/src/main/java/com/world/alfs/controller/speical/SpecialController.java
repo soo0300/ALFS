@@ -24,7 +24,7 @@ public class SpecialController {
     private final SpecialService specialService;
 
     @PostMapping()
-    public ApiResponse<Long> addSpecial(@RequestBody AddSpecialReqeust request) throws Exception {
+    public ApiResponse<Long> addSpecial(@RequestBody AddSpecialReqeust request) {
         AddSpecialDto dto = request.toDto();
         Long id = specialService.addSpecial(dto);
         return ApiResponse.ok(id);
