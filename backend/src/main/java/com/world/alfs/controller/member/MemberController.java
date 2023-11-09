@@ -30,10 +30,13 @@ public class MemberController {
         catch (Exception e){
             return ApiResponse.badRequest(e.getMessage());
         }
-        if (addressService.addAddress(addressDto, member_id, true).isPresent()){
+        try {
+            addressService.addAddress(addressDto, member_id, true);
             return ApiResponse.created("회원가입이 완료되었습니다. 주소지 설정이 완료되었습니다.", null);
         }
-        return ApiResponse.created("회원가입이 완료되었습니다. 주소지 설정이 실패하였습니다.", null);
+        catch (Exception e) {
+            return ApiResponse.created("회원가입이 완료되었습니다. 주소지 설정에 실패하였습니다.", null);
+        }
     }
 
     @PostMapping("/login")

@@ -29,20 +29,22 @@ public class AddressController {
 
     @PutMapping()
     public ApiResponse setDefaultAddress(@RequestBody SetDefaultRequest setDefaultRequest){
-        Optional<GetAddressResponse> response = addressService.setAsDefaultAddress(setDefaultRequest.getMember_id(), setDefaultRequest.getAddress_id());
-        if (response.isPresent()){
-            return ApiResponse.ok(response.get());
+        try {
+            return addressService.setAsDefaultAddress(setDefaultRequest.getMember_id(), setDefaultRequest.getAddress_id());
         }
-        return ApiResponse.badRequest("회원 혹은 주소가 잘못되었습니다.");
+        catch (Exception e){
+            return ApiResponse.badRequest(e.getMessage());
+        }
     }
 
     @PostMapping()
     public ApiResponse addAddress(@RequestBody AddAddressRequest addAddressRequest){
-        Optional<GetAddressResponse> address = addressService.addAddress(addAddressRequest.getAddress(), addAddressRequest.getMember_id(), false);
-        if (address.isPresent()){
-            return ApiResponse.created("주소가 추가되었습니다.", address.get());
+        try {
+           return addressService.addAddress(addAddressRequest.getAddress(), addAddressRequest.getMember_id(), false);
         }
-        return ApiResponse.badRequest("잘못된 정보입니다.");
+        catch (Exception e){
+            return ApiResponse.badRequest(e.getMessage());
+        }
     }
 
     @PostMapping("/delete")
