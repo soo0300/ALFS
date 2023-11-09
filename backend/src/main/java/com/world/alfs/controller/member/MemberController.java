@@ -82,7 +82,7 @@ public class MemberController {
     @PutMapping("/update")
     public ApiResponse updateMember(@RequestBody UpdateMemberRequest updateMemberRequest){
         try {
-            return ApiResponse.ok(memberService.updateMember(updateMemberRequest.getMember_id(), updateMemberRequest.getMember()));
+            return memberService.updateMember(updateMemberRequest.getMember_id(), updateMemberRequest.getMember());
         }
         catch (Exception e){
             return ApiResponse.badRequest(e.getMessage());
