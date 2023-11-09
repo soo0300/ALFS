@@ -90,6 +90,8 @@ public class MemberService {
                 .findAny()
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 회원입니다."));
         if (! member.getPassword().equals(password)) throw new IllegalArgumentException("비밀번호가 틀렷습니다.");
+        member.setActivate(false);
+        userRepository.save(member);
         return ApiResponse.ok("삭제되었습니다.");
     }
 }

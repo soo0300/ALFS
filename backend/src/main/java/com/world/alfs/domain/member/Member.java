@@ -73,4 +73,8 @@ public class Member {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public void setActivate(boolean activate){
+        this.activate = activate;
+    }
 }
