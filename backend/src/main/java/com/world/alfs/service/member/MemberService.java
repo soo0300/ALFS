@@ -21,6 +21,13 @@ public class MemberService {
 
     private final MemberRepository userRepository;
 
+    public ApiResponse getMember(Long member_id) {
+        Member member = userRepository.findById(member_id)
+                .filter(m -> m.getActivate())
+                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        return ApiResponse.ok(member.toGetMemberResponse());
+    }
+
     // 회원가입
     public Long addMember(AddMemberDto addMemberDto) throws Exception{
         if (checkIdentifier(addMemberDto.getIdentifier())) throw new Exception("중복된 아이디 입니다.");

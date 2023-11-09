@@ -20,6 +20,16 @@ public class MemberController {
     private final MemberService memberService;
     private final AddressService addressService;
 
+    @GetMapping("/{member_id}")
+    public ApiResponse getMemberInfo(@PathVariable("member_id") Long member_id){
+        try {
+            return memberService.getMember(member_id);
+        }
+        catch (Exception e){
+            return ApiResponse.badRequest(e.getMessage());
+        }
+    }
+
     @PostMapping("/signup")
     public ApiResponse<Long> addMember(@RequestBody SignUpRequest signUpRequest){
         AddressDto addressDto = signUpRequest.getAddress();

@@ -1,5 +1,6 @@
 package com.world.alfs.domain.member;
 
+import com.world.alfs.controller.member.response.GetMemberResponse;
 import lombok.*;
 import javax.persistence.*;
 
@@ -46,6 +47,17 @@ public class Member {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.activate = activate;
+    }
+
+    public GetMemberResponse toGetMemberResponse(){
+        return GetMemberResponse.builder()
+                .member_id(id)
+                .identifier(identifier)
+                .email(email)
+                .name(name)
+                .birth(birth)
+                .phoneNumber(phoneNumber)
+                .build();
     }
 
     // == 비지니스 로직 == //
