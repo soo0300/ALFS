@@ -23,8 +23,12 @@ public class AddressController {
 
     @GetMapping("/{id}")
     public ApiResponse<List<GetAddressResponse>> getAddress(@PathVariable Long id){
-        List<GetAddressResponse> address_list = addressService.getAddress(id);
-        return ApiResponse.ok(address_list);
+        try {
+            return ApiResponse.ok(addressService.getAddress(id));
+        }
+        catch (Exception e){
+            return ApiResponse.badRequest(e.getMessage());
+        }
     }
 
     @PutMapping()

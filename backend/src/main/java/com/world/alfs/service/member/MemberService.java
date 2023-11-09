@@ -69,9 +69,9 @@ public class MemberService {
         Member member = userRepository.findById(member_id).stream()
                 .filter(m -> m.getActivate()).findAny()
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 회원입니다."));
-        if (member.getIdentifier() != addMemberDto.getIdentifier() && checkIdentifier(addMemberDto.getIdentifier())) throw new IllegalArgumentException("이미 존재하는 아이디 입니다.");
-        if (member.getEmail() != addMemberDto.getEmail() && checkEmail(addMemberDto.getEmail())) throw new IllegalArgumentException("이미 존재하는 이메일 입니다.");
-        if (member.getPhoneNumber() != addMemberDto.getPhoneNumber() && checkPhoneNumber(addMemberDto.getPhoneNumber())) throw new IllegalArgumentException("이미 존재하는 전화번호 입니다.");
+        if (!member.getIdentifier().equals(addMemberDto.getIdentifier()) && checkIdentifier(addMemberDto.getIdentifier())) throw new IllegalArgumentException("이미 존재하는 아이디 입니다.");
+        if (!member.getEmail().equals(addMemberDto.getEmail()) && checkEmail(addMemberDto.getEmail())) throw new IllegalArgumentException("이미 존재하는 이메일 입니다.");
+        if (!member.getPhoneNumber().equals(addMemberDto.getPhoneNumber()) && checkPhoneNumber(addMemberDto.getPhoneNumber())) throw new IllegalArgumentException("이미 존재하는 전화번호 입니다.");
         if (checkPassword(addMemberDto.getPassword(), addMemberDto.getPasswordCheck())) throw new IllegalArgumentException(("비밀번호가 서로 다릅니다."));
 
         member.setIdentifier(addMemberDto.getIdentifier());
