@@ -1,4 +1,4 @@
-package com.world.alfs.config.batch;
+package com.world.alfs.config.batch.special;
 
 import com.world.alfs.domain.special.Special;
 import lombok.RequiredArgsConstructor;
@@ -8,13 +8,16 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.HashMap;
 
 @Slf4j
 @Configuration
@@ -24,53 +27,63 @@ public class BatchJobConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
+    private final JobCompletionNotificationListener jobCompletionNotificationListener;
 
-    private static final String JOB_NAME = "jpaJob";
-    private static final String STEP_NAME = "jpaStep";
+
+    private static final String JOB_NAME = "specialStartJob";
+    private static final String STEP_NAME = "specialStartStep";
     private static final int CHUNK_SIZE = 3;
 
     @Bean
-    public Job jpaJob(){
+    public Job specialStartJob(){
         return jobBuilderFactory.get(JOB_NAME)
-                .start(jpaStep())
+                .start(specialStartStep())
                 .incrementer(new RunIdIncrementer()) // listener 추가 가능
+                .listener(jobCompletionNotificationListener)
                 .build();
     }
 
     @Bean
-    public Step jpaStep(){
+    public Step specialStartStep(){
         return stepBuilderFactory.get(STEP_NAME)
                 .<Special, Special>chunk(CHUNK_SIZE)
                 .reader(customItemReader())
+                .processor(customItemProcessor())
                 .writer(customItemWriter())
                 .build();
     }
 
     @Bean
     public ItemReader<Special> customItemReader() {
-
-//        HashMap<String, Object> parameters = new HashMap<>();
-//        parameters.put("age",25);
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("id",3);
+        parameters.put("status",0);
 
         return new JpaCursorItemReaderBuilder<Special>()
                 .name("jpaCursorItemReader")
                 .entityManagerFactory(entityManagerFactory)
-                .queryString("select s from Special s") // JPQL -> 테이블명은 첫글자만 대문자
-//                .parameterValues(parameters)
+                .queryString("select s from Special s where supervisor_id =:id and status =:status")
+                .parameterValues(parameters)
                 .build();
     }
 
-//    @Bean
-//    public CustomerItemProcessor jpaItemProcessor(){
-//
-//    }
+    @Bean
+    public ItemProcessor<Special, Special> customItemProcessor() {
+        return new CustomItemProcessor();
+    }
+
+    public static class CustomItemProcessor implements ItemProcessor<Special, Special> {
+        @Override
+        public Special process(Special item) {
+            item.setStatus(1); // Special 객체의 status를 0에서 1로 변경
+            return item;
+        }
+    }
 
     @Bean
     public ItemWriter<Special> customItemWriter() {
-        return items -> {
-            for (Special item : items) {
-                System.out.println("item = " + item.toString());
-            }
-        };
+        JpaItemWriter<Special> itemWriter = new JpaItemWriter<>();
+        itemWriter.setEntityManagerFactory(entityManagerFactory);
+        return itemWriter;
     }
 }
