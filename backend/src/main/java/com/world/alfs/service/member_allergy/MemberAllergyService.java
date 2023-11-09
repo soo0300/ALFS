@@ -1,7 +1,7 @@
 package com.world.alfs.service.member_allergy;
 
 import com.world.alfs.common.exception.CustomException;
-import com.world.alfs.common.exception.ErrorCode;
+import com.world.alfs.controller.allergy.response.AllergyResponse;
 import com.world.alfs.domain.allergy.Allergy;
 import com.world.alfs.domain.allergy.repository.AllergyRepository;
 import com.world.alfs.domain.member.Member;
@@ -10,6 +10,7 @@ import com.world.alfs.domain.member_allergy.MemberAllergy;
 import com.world.alfs.domain.member_allergy.repository.MemberAllergyRepository;
 import com.world.alfs.service.member_allergy.dto.AddMemberAllergyDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import static com.world.alfs.common.exception.ErrorCode.MEMBER_NOT_FOUND;
 @RequiredArgsConstructor
 @Service
 @Transactional
+@Slf4j
 public class MemberAllergyService {
 
     private final MemberAllergyRepository memberAllergyRepository;
@@ -54,6 +56,23 @@ public class MemberAllergyService {
             list.add(ma.getAllergy().getId());
         }
         return list;
+    }
+
+    public List<AllergyResponse> getMemberAllergy(Long memberId, int isAllergy) {
+        List<MemberAllergy> memberAllergyList = memberAllergyRepository.findByMemberId(memberId);
+
+        List<AllergyResponse> allergyResponseList = new ArrayList<>();
+
+        for (MemberAllergy memberAllergy : memberAllergyList) {
+            Optional<Allergy> allergy = allergyRepository.findByIdAndAllergyType(memberAllergy.getAllergy().getId(), isAllergy);
+            if (allergy.isEmpty()) {
+                continue;
+            }
+            AllergyResponse allergyResponse = allergy.get().toResponse();
+            allergyResponseList.add(allergyResponse);
+        }
+
+        return allergyResponseList;
     }
 
 }
