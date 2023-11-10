@@ -1,6 +1,5 @@
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
-// import Card from "@/app/_components/card/Card";
+import React, { useEffect, useState } from "react";
 import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { AllProduct, DeleteProduct } from "@/app/api/supervisor/supervisor";
@@ -15,7 +14,6 @@ const Card = dynamic(() => import("../../../_components/card/Card"), {
 export default function Page() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [memberId, setMemberId] = useState<any>("");
 
   const getData = async () => {
     const res = await AllProduct();
@@ -39,8 +37,6 @@ export default function Page() {
   };
 
   useEffect(() => {
-    const id = localStorage.getItem("id");
-    setMemberId(id);
     getData();
   }, []);
   return (
@@ -58,7 +54,7 @@ export default function Page() {
       </div>
       <div className="w-[750px] h-auto mt-[50px]">
         <div className="grid grid-cols-3 mx-auto mt-[10px]">
-          {filteredData.map((item: any) => (
+          {/* {filteredData.map((item: any) => (
             <>
               <div key={item.id} className="w-[178px] h-[500px] ml-[44px]">
                 <div className="flex justify-evenly mb-[10px]">
@@ -76,7 +72,7 @@ export default function Page() {
                   </Button>
                 </div>
 
-                {/* <Card
+                <Card
                   name={item.name}
                   image={item.img}
                   id={item.id}
@@ -85,10 +81,10 @@ export default function Page() {
                   sale={item.sale}
                   delivery={item.delivery}
                   member_id={memberId}
-                /> */}
+                />
               </div>
             </>
-          ))}
+          ))} */}
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@ export default function TopNav() {
   const router = useRouter();
   const toast = useToast();
   const [memberId, setMemberId] = useState<any>();
+  const [superId, setSuperId] = useState<any>();
   const handleLogout = () => {
     toast({
       title: "로그아웃 되었습니다.",
@@ -17,13 +18,17 @@ export default function TopNav() {
       isClosable: true,
     });
     localStorage.removeItem("id");
+    localStorage.removeItem("supervisorId");
     setMemberId("");
+    setSuperId("");
     router.push("/");
   };
 
   useEffect(() => {
     const id = localStorage.getItem("id");
+    const sup = localStorage.getItem("supervisorId");
     setMemberId(id);
+    setSuperId(sup);
   }, []);
 
   return (
@@ -37,6 +42,17 @@ export default function TopNav() {
             <Link href="/mypage/order">
               <Button variant="unstyled" marginRight="10px">
                 마이페이지
+              </Button>
+            </Link>
+          </>
+        ) : superId ? (
+          <>
+            <Button variant="unstyled" marginRight="10px" onClick={handleLogout}>
+              로그아웃
+            </Button>
+            <Link href="/mypage/supervisor/register">
+              <Button variant="unstyled" marginRight="10px">
+                관리자페이지
               </Button>
             </Link>
           </>
