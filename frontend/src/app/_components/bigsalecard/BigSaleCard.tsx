@@ -43,29 +43,27 @@ export default function BigSaleCard({ name, image, id, title, price, delivery, s
 
   return (
     <div className='mx-auto'>
-      <Link href={{ pathname: `/detail/${id}` }}>
-        {status == 0 && Date.now() < Date.parse(start) ?
-          <span className='absolute text-center text-lg font-bold text-red-600 ml-3.5 mt-24 bg-white rounded w-[150px] pt-1 -rotate-12'>
-            {parseLeftTime(leftTime)}
-          </span>
-        : null}
-        {status == 2 ?
-          <span className='absolute text-center text-lg font-bold text-gray-600 ml-3.5 mt-24 bg-white rounded w-[150px] pt-1 -rotate-12'>
-            SOLD OUT
-          </span>
-        : null}
-        <Card
-          member_id={member_id}
-          name={name}
-          image={image}
-          id={id}
-          title={title}
-          price={price}
-          sale={sale}
-          delivery={delivery}
-          filterCode={[]}
-        />
-      </Link>
+      {status == 0 && Date.now() < Date.parse(start) ?
+        <span className='absolute text-center text-lg font-bold text-red-600 ml-3.5 mt-24 bg-white rounded w-[150px] pt-1 -rotate-12'>
+          {parseLeftTime(leftTime)}
+        </span>
+      : null}
+      {status == 2 ?
+        <span className='absolute text-center text-lg font-bold text-gray-600 ml-3.5 mt-24 bg-white rounded w-[150px] pt-1 -rotate-12'>
+          SOLD OUT
+        </span>
+      : null}
+      <Card
+        member_id={member_id}
+        name={name}
+        image={image}
+        id={id}
+        title={title}
+        price={price}
+        sale={sale}
+        delivery={delivery}
+        filterCode={[]}
+      />
     </div>
   )
 };
