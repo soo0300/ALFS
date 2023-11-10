@@ -45,6 +45,12 @@ public class ProductController {
         return ApiResponse.ok(savedProduct);
     }
 
+    @GetMapping("/cnt")
+    public ApiResponse<Long> getProductCnt(){
+        Long productCnt = productService.countProduct();
+        return ApiResponse.ok(productCnt);
+    }
+
     @GetMapping("/all")
     public ApiResponse<List<GetProductListResponse>> getAllProduct() {
         List<GetProductListResponse> response = productService.getAllProduct(null);
