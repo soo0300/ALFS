@@ -4,6 +4,7 @@ import com.world.alfs.domain.special.Special;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -13,10 +14,12 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManagerFactory;
+import javax.transaction.Transactional;
 import java.util.HashMap;
 
 @Slf4j
@@ -28,7 +31,6 @@ public class BatchJobConfiguration {
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
     private final JobCompletionNotificationListener jobCompletionNotificationListener;
-
 
     private static final String JOB_NAME = "specialStartJob";
     private static final String STEP_NAME = "specialStartStep";
@@ -47,22 +49,23 @@ public class BatchJobConfiguration {
     public Step specialStartStep(){
         return stepBuilderFactory.get(STEP_NAME)
                 .<Special, Special>chunk(CHUNK_SIZE)
-                .reader(customItemReader())
+                .reader(customItemReader(0L, 0L))
                 .processor(customItemProcessor())
                 .writer(customItemWriter())
                 .build();
     }
 
     @Bean
-    public ItemReader<Special> customItemReader() {
+    public ItemReader<Special> customItemReader(@Value("#{jobParameters['supervisorId']}") Long supervisorId, @Value("#{jobParameters['productId']}") Long productId) {
         HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("id",3);
+        parameters.put("id", supervisorId);
+        parameters.put("productId", productId);
         parameters.put("status",0);
 
         return new JpaCursorItemReaderBuilder<Special>()
                 .name("jpaCursorItemReader")
                 .entityManagerFactory(entityManagerFactory)
-                .queryString("select s from Special s where supervisor_id =:id and status =:status")
+                .queryString("select s from Special s where supervisor_id =:id and status =:status and product_id =: productId")
                 .parameterValues(parameters)
                 .build();
     }
@@ -81,6 +84,7 @@ public class BatchJobConfiguration {
     }
 
     @Bean
+    @Transactional
     public ItemWriter<Special> customItemWriter() {
         JpaItemWriter<Special> itemWriter = new JpaItemWriter<>();
         itemWriter.setEntityManagerFactory(entityManagerFactory);
