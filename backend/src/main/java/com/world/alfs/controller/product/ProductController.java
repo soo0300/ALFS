@@ -18,10 +18,10 @@ import com.world.alfs.service.product_img.ProductImgService;
 import com.world.alfs.service.product_ingredient.ProductIngredientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,86 +48,110 @@ public class ProductController {
         return ApiResponse.ok(savedProduct);
     }
 
+    @GetMapping("/cnt")
+    public ApiResponse<Long> getProductCnt(){
+        Long productCnt = productService.countProduct();
+        return ApiResponse.ok(productCnt);
+    }
+
     @GetMapping("/all")
     public ApiResponse<List<GetProductListResponse>> getAllProduct() {
-        List<GetProductListResponse> response = productService.getAllProduct();
+        List<GetProductListResponse> response = productService.getAllProduct(null);
         return ApiResponse.ok(response);
     }
 
-    @GetMapping("/all/{memberId}")
-    public ApiResponse<List<GetProductListResponse>> getAllProduct(@PathVariable Long memberId) {
-//        List<Long> product_list = productService.getAllProductId();
-        List<GetProductListResponse> response = productService.getAllProduct();
+    @GetMapping("category/{memberId}/{category}")
+    public ApiResponse<List<GetProductListResponse>> getCategoryProduct(@PathVariable Long memberId, @PathVariable int category){
+        List<Product> product_list = productService.getCategoryProduct(category); //카데고리에 해당하는 상품 객체 가져오기
+        List<GetProductListResponse>response = productService.getAllProduct(product_list);
 
-        response.forEach(productResponse -> {
-            List<String> compareIngredient = productIngredientService.getAllIngredientId(productResponse.getId())
-                    .stream()
-                    .map(Ingredient::getName)
-                    .collect(Collectors.toList());
+        for (int i = 0; i < product_list.size(); i++) {
+            List<String> compare_ingredient = new ArrayList<>();
+            List<Ingredient> product_ingredient_list = productIngredientService.getAllIngredientId(product_list.get(i).getId());
+            for (int a = 0; a < product_ingredient_list.size(); a++) {
+                compare_ingredient.add(product_ingredient_list.get(a).getName());
+            }
+            List<Long> memberAllergy_allergy_id_list = memberAllergyService.getFilteredAllergyId(memberId);
+            Set<Integer> FilterCode = new HashSet<>();
 
-            List<Long> memberAllergyAllergyIdList = memberAllergyService.getFilteredAllergyId(memberId);
-            Set<Integer> filterCode = memberAllergyAllergyIdList.stream()
-                    .map(allergyService::getAllergy)
-                    .filter(allergy -> compareIngredient.contains(allergy.getAllergyName()))
-                    .map(Allergy::getAllergyType)
-                    .collect(Collectors.toSet());
 
-            productResponse.setCode(filterCode);
-        });
+            for (int a = 0; a < memberAllergy_allergy_id_list.size(); a++) {
+                Allergy allergy = allergyService.getAllergy(memberAllergy_allergy_id_list.get(a));
+                for (int b = 0; b < compare_ingredient.size(); b++) {
+                    if (compare_ingredient.get(b).equals(allergy.getAllergyName())) {
+                        FilterCode.add(allergy.getAllergyType());
+                    }
+                }
+            }
+            //FilterCode 중복 제거
+            if(FilterCode.isEmpty()){
+                FilterCode.add(3);
+            }
+            response.get(i).setCode(FilterCode);
+        }
+        return ApiResponse.ok(response);
+    }
 
-//        for (int i = 0; i < product_list.size(); i++) {
-//            List<String> compare_ingredient = new ArrayList<>();
-//            List<Ingredient> product_ingredient_list = productIngredientService.getAllIngredientId(product_list.get(i));
-//            for (int a = 0; a < product_ingredient_list.size(); a++) {
-//                compare_ingredient.add(product_ingredient_list.get(a).getName());
-//            }
-//            List<Long> memberAllergy_allergy_id_list = memberAllergyService.getFilteredAllergyId(memberId);
-//            Set<Integer> FilterCode = new HashSet<>();
-//            for (int a = 0; a < memberAllergy_allergy_id_list.size(); a++) {
-//                Allergy allergy = allergyService.getAllergy(memberAllergy_allergy_id_list.get(a));
-//                for (int b = 0; b < compare_ingredient.size(); b++) {
-//                    if (compare_ingredient.get(b).equals(allergy.getAllergyName())) {
-//                        FilterCode.add(allergy.getAllergyType());
-//                    }
-//                }
-//            }
-//
-//            // 제조시설 알러지 필터 체크
-//            boolean isManuAllergy = manufacturingAllergyService.getManuAllergy(product_list.get(i), memberId);
-//            if (isManuAllergy) {
-//                FilterCode.add(2);
-//            }
-//
-//            //FilterCode 중복 제거
-//            response.get(i).setCode(FilterCode);
-//        }
+    @GetMapping("/all/{memberId}/{page}")
+    public ApiResponse<List<GetProductListResponse>> getAllProduct(@PathVariable Long memberId, @PathVariable Integer page) {
+        List<Product> product_list = productService.getAllProductId(productService.countPage(), page);
+        List<GetProductListResponse> response = productService.getAllProduct(product_list);
+
+        for (int i = 0; i < product_list.size(); i++) {
+            List<String> compare_ingredient = new ArrayList<>();
+            List<Ingredient> product_ingredient_list = productIngredientService.getAllIngredientId(product_list.get(i).getId());
+            for (int a = 0; a < product_ingredient_list.size(); a++) {
+                compare_ingredient.add(product_ingredient_list.get(a).getName());
+            }
+            List<Long> memberAllergy_allergy_id_list = memberAllergyService.getFilteredAllergyId(memberId);
+            Set<Integer> FilterCode = new HashSet<>();
+
+
+            for (int a = 0; a < memberAllergy_allergy_id_list.size(); a++) {
+                Allergy allergy = allergyService.getAllergy(memberAllergy_allergy_id_list.get(a));
+                for (int b = 0; b < compare_ingredient.size(); b++) {
+                    if (compare_ingredient.get(b).equals(allergy.getAllergyName())) {
+                        FilterCode.add(allergy.getAllergyType());
+                    }
+                }
+            }
+
+            // 제조시설 필터 코드 추가
+            boolean isManuAllergy = manufacturingAllergyService.getManuAllergy(product_list.get(i).getId(), memberId);
+            if (isManuAllergy) {
+                FilterCode.add(2);
+            }
+
+            //FilterCode 중복 제거
+            if(FilterCode.isEmpty()) {
+                FilterCode.add(3);
+            }
+            response.get(i).setCode(FilterCode);
+        }
         return ApiResponse.ok(response);
     }
 
 
 //    @GetMapping("/all/{memberId}")
 //    public ApiResponse<List<GetProductListResponse>> getAllProduct(@PathVariable Long memberId) {
-//        List<Long> product_list = productService.getAllProductId();
 //        List<GetProductListResponse> response = productService.getAllProduct();
-//        for (int i = 0; i < product_list.size(); i++) {
-//            List<String> compare_ingredient = new ArrayList<>();
-//            List<Ingredient> product_ingredient_list = productIngredientService.getAllIngredientId(product_list.get(i));
-//            for (int a = 0; a < product_ingredient_list.size(); a++) {
-//                compare_ingredient.add(product_ingredient_list.get(a).getName());
-//            }
-//            List<Long> memberAllergy_allergy_id_list = memberAllergyService.getFilteredAllergyId(memberId);
-//            Set<Integer> FilterCode = new HashSet<>();
-//            for (int a = 0; a < memberAllergy_allergy_id_list.size(); a++) {
-//                Allergy allergy = allergyService.getAllergy(memberAllergy_allergy_id_list.get(a));
-//                for (int b = 0; b < compare_ingredient.size(); b++) {
-//                    if (compare_ingredient.get(b).equals(allergy.getAllergyName())) {
-//                        FilterCode.add(allergy.getAllergyType());
-//                    }
-//                }
-//            }
-//            //FilterCode 중복 제거
-//            response.get(i).setCode(FilterCode);
-//        }
+//
+//        response.forEach(productResponse -> {
+//            List<String> compareIngredient = productIngredientService.getAllIngredientId(productResponse.getId())
+//                    .stream()
+//                    .map(Ingredient::getName)
+//                    .collect(Collectors.toList());
+//
+//            List<Long> memberAllergyAllergyIdList = memberAllergyService.getFilteredAllergyId(memberId);
+//            Set<Integer> filterCode = memberAllergyAllergyIdList.stream()
+//                    .map(allergyService::getAllergy)
+//                    .filter(allergy -> compareIngredient.contains(allergy.getAllergyName()))
+//                    .map(Allergy::getAllergyType)
+//                    .collect(Collectors.toSet());
+//
+//            productResponse.setCode(filterCode);
+//        });
+//
 //        return ApiResponse.ok(response);
 //    }
 
