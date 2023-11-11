@@ -20,12 +20,14 @@ type Props = {
 }
 
 function parseLeftTime(mills : number) {
+  const days : number = Math.floor(mills / 86400000);
+  mills = mills % 86400000
   const hours : number = Math.floor(mills / 3600000)
-  mills -= hours * 3600000
+  mills = mills % 3600000
   const minutes : number = Math.floor(mills / 60000)
-  mills -= minutes * 60000
+  mills = mills % 60000
   const seconds : number = Math.floor(mills / 1000)
-  return  (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (seconds > 0 ? seconds + "s" : "")
+  return (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (days < 1 && seconds > 0 ? seconds + "s" : "")
 }
 
 export default function BigSaleCard({ name, image, id, title, price, delivery, status, start, end, sale, member_id }: Props){
@@ -43,29 +45,27 @@ export default function BigSaleCard({ name, image, id, title, price, delivery, s
 
   return (
     <div className='mx-auto'>
-      <Link href={{ pathname: `/detail/${id}` }}>
-        {status == 0 && Date.now() < Date.parse(start) ?
-          <span className='absolute text-center text-lg font-bold text-red-600 ml-3.5 mt-24 bg-white rounded w-[150px] pt-1 -rotate-12'>
-            {parseLeftTime(leftTime)}
-          </span>
-        : null}
-        {status == 2 ?
-          <span className='absolute text-center text-lg font-bold text-gray-600 ml-3.5 mt-24 bg-white rounded w-[150px] pt-1 -rotate-12'>
-            SOLD OUT
-          </span>
-        : null}
-        <Card
-          member_id={member_id}
-          name={name}
-          image={image}
-          id={id}
-          title={title}
-          price={price}
-          sale={sale}
-          delivery={delivery}
-          filterCode={[]}
-        />
-      </Link>
+      {status == 0 && Date.now() < Date.parse(start) ?
+        <span className='absolute text-center text-lg font-bold text-red-600 ml-3.5 mt-24 bg-white rounded w-[150px] pt-1 -rotate-12'>
+          {parseLeftTime(leftTime)}
+        </span>
+      : null}
+      {status == 2 ?
+        <span className='absolute text-center text-lg font-bold text-gray-600 ml-3.5 mt-24 bg-white rounded w-[150px] pt-1 -rotate-12'>
+          SOLD OUT
+        </span>
+      : null}
+      <Card
+        member_id={member_id}
+        name={name}
+        image={image}
+        id={id}
+        title={title}
+        price={price}
+        sale={sale}
+        delivery={delivery}
+        filterCode={[]}
+      />
     </div>
   )
 };
