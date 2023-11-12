@@ -1,6 +1,6 @@
 import { useEffect, DependencyList } from "react";
 
-export function useDebounceEffect(fn: () => void, waitTime: number, deps?: DependencyList) {
+export function useDebounceEffect(fn: () => void, waitTime: number, deps?: any) {
   useEffect(() => {
     const t = setTimeout(() => {
       fn.apply(undefined, deps);

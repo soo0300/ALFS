@@ -5,6 +5,7 @@ import { canvasPreview } from "./canvasPreview";
 import { useDebounceEffect } from "./useDebounceEffect";
 
 import "react-image-crop/dist/ReactCrop.css";
+import { Button, Input } from "@chakra-ui/react";
 
 // This is to demonstate how to make and center a % aspect crop
 // which is a bit trickier so we use some helper functions.
@@ -24,7 +25,7 @@ function centerAspectCrop(mediaWidth: number, mediaHeight: number, aspect: numbe
   );
 }
 
-export default function CropImage() {
+export default function CropImage(props: any) {
   const [imgSrc, setImgSrc] = useState("");
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -34,7 +35,8 @@ export default function CropImage() {
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
   const [scale, setScale] = useState(1);
   const [rotate, setRotate] = useState(0);
-  const [aspect, setAspect] = useState<number | undefined>(16 / 9);
+  const [aspect, setAspect] = useState<number | undefined>(undefined);
+  const [onButton, setOnButton] = useState(false);
 
   function onSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
@@ -87,14 +89,16 @@ export default function CropImage() {
     const blob = await offscreen.convertToBlob({
       type: "image/png",
     });
+    setOnButton(true);
+    props.data(blob);
 
-    if (blobUrlRef.current) {
-      URL.revokeObjectURL(blobUrlRef.current);
-    }
-    blobUrlRef.current = URL.createObjectURL(blob);
+    // if (blobUrlRef.current) {
+    //   URL.revokeObjectURL(blobUrlRef.current);
+    // }
+    // blobUrlRef.current = URL.createObjectURL(blob);
 
-    hiddenAnchorRef.current!.href = blobUrlRef.current;
-    console.log(hiddenAnchorRef.current);
+    // hiddenAnchorRef.current!.href = blobUrlRef.current;
+    // console.log(hiddenAnchorRef.current);
     // hiddenAnchorRef.current!.click();
   }
 
@@ -109,50 +113,10 @@ export default function CropImage() {
     [completedCrop, scale, rotate]
   );
 
-  function handleToggleAspectClick() {
-    if (aspect) {
-      setAspect(undefined);
-    } else {
-      setAspect(16 / 9);
-
-      if (imgRef.current) {
-        const { width, height } = imgRef.current;
-        const newCrop = centerAspectCrop(width, height, 16 / 9);
-        setCrop(newCrop);
-        // Updates the preview
-        setCompletedCrop(convertToPixelCrop(newCrop, width, height));
-      }
-    }
-  }
-
   return (
     <div className="App">
       <div className="Crop-Controls">
-        <input type="file" accept="image/*" onChange={onSelectFile} />
-        <div>
-          <label htmlFor="scale-input">Scale: </label>
-          <input
-            id="scale-input"
-            type="number"
-            step="0.1"
-            value={scale}
-            disabled={!imgSrc}
-            onChange={(e) => setScale(Number(e.target.value))}
-          />
-        </div>
-        <div>
-          <label htmlFor="rotate-input">Rotate: </label>
-          <input
-            id="rotate-input"
-            type="number"
-            value={rotate}
-            disabled={!imgSrc}
-            onChange={(e) => setRotate(Math.min(180, Math.max(-180, Number(e.target.value))))}
-          />
-        </div>
-        <div>
-          <button onClick={handleToggleAspectClick}>Toggle aspect {aspect ? "off" : "on"}</button>
-        </div>
+        <Input type="file" accept="image/*" onChange={onSelectFile} />
       </div>
       {!!imgSrc && (
         <ReactCrop
@@ -161,7 +125,7 @@ export default function CropImage() {
           onComplete={(c) => setCompletedCrop(c)}
           aspect={aspect}
           // minWidth={400}
-          minHeight={200}
+          // minHeight={200}
         >
           <img
             ref={imgRef}
@@ -174,19 +138,19 @@ export default function CropImage() {
       )}
       {!!completedCrop && (
         <>
-          <div>
+          <div className="flex items-center justify-evenly">
             <canvas
               ref={previewCanvasRef}
               style={{
                 border: "1px solid black",
                 objectFit: "contain",
-                width: completedCrop.width,
-                height: completedCrop.height,
+                width: "500px",
+                height: "auto",
               }}
             />
-          </div>
-          <div>
-            <button onClick={onDownloadCropClick}>Download Crop</button>
+            <Button isDisabled={onButton} variant="outline" colorScheme="whatsapp" onClick={onDownloadCropClick}>
+              원재료 추출하기
+            </Button>
             <a
               href="#hidden"
               ref={hiddenAnchorRef}

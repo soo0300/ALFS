@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 export default function TopNav() {
   const router = useRouter();
-  const toast = useToast();
+  const toast = useToast({ position: "top" });
   const [memberId, setMemberId] = useState<any>();
   const [superId, setSuperId] = useState<any>();
   const handleLogout = () => {
@@ -50,7 +50,7 @@ export default function TopNav() {
             <Button variant="unstyled" marginRight="10px" onClick={handleLogout}>
               로그아웃
             </Button>
-            <Link href="/mypage/supervisor/register">
+            <Link href="/supervisor/register">
               <Button variant="unstyled" marginRight="10px">
                 관리자페이지
               </Button>
@@ -63,7 +63,7 @@ export default function TopNav() {
                 로그인
               </Button>
             </Link>
-            <Link href="signup">
+            <Link href="/signup">
               <Button variant="unstyled" marginRight="10px">
                 회원가입
               </Button>
