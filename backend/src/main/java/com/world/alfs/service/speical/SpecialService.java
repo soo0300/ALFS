@@ -120,13 +120,6 @@ public class SpecialService {
         }
 
         return responseList;
-
-//        return specialList.stream()
-//                .map(special -> {
-//                    ProductImg img = productImgRepository.findByProductId(special.getProduct().getId());
-//                    return special.toGetSpecialListResponse(img);
-//                })
-//                .collect(Collectors.toList());
     }
 
     public GetSpecialResponse getSpecial(Long id) {
