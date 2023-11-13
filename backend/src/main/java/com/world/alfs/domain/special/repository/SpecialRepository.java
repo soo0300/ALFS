@@ -17,4 +17,8 @@ public interface SpecialRepository extends JpaRepository<Special, Long> {
 
         @Query("SELECT s.status FROM Special s WHERE s.product.id =:id")
         int findByStatus(Long id);
+
+        void deleteByProductId(Long id);
+
+        Special findByProductId(Long id);
 }
