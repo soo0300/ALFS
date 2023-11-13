@@ -66,7 +66,7 @@ public class ProductController {
         return ApiResponse.ok(response);
     }
 
-    @GetMapping("category/{memberId}/{category}")
+    @GetMapping("/category/{memberId}/{category}")
     public ApiResponse<List<GetProductListResponse>> getCategoryProduct(@PathVariable Long memberId, @PathVariable int category) {
         List<Product> product_list = productService.getCategoryProduct(category); //카데고리에 해당하는 상품 객체 가져오기
         List<GetProductListResponse> response = productService.getAllProduct(product_list);
