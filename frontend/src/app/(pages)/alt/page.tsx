@@ -7,7 +7,7 @@ type Props = {};
 export default function Page({}: Props) {
   const [alterList, setAlterList] = useState<Array<string>>([]);
   const [selectedButtonIndices, setSelectedButtonIndices] = useState<number[]>([]);
-
+  const [totalCnt, setTotalCnt] = useState<number>(0);
   useEffect(() => {
     const fetchAlterData = async () => {
       const res: any = await AlterList();
@@ -16,7 +16,8 @@ export default function Page({}: Props) {
       const CatName: Array<string> = res.map((item: any) => item.alternativeName);
       console.log("카테고리이름", CatName);
       const Allres: Array<string> = await AlterAll(CatName);
-      console.log("대체식품 전체조회", Allres);
+      console.log("대체식품 전체조회", Allres, Allres.length);
+      setTotalCnt(Allres.length);
     };
     fetchAlterData();
   }, []);
@@ -43,7 +44,7 @@ export default function Page({}: Props) {
             </button>
           ))}
       </div>
-      <div className="Container flex flex-col justify-center w-[1000px] h-auto mt-[124px]"></div>
+      <div className="Container flex flex-col justify-center w-[1000px] h-auto mt-[124px]">총 {totalCnt}건</div>
     </div>
   );
 }
