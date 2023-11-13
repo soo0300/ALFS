@@ -1,6 +1,6 @@
 "use client";
 
-import { CategorizedList } from '@/app/api/categorizedlist/CategorizedList';
+import { CategorizedList, CategorizedFilterdList } from '@/app/api/categorizedlist/CategorizedList';
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Card from '@/app/_components/card/Card';
@@ -26,9 +26,9 @@ export default function Page() {
   useEffect(()=>{
     const initialize = async () => {
       const member_id = localStorage.getItem("id")!;
+      const response : any = !member_id ? await CategorizedFilterdList(member_id, params.category[0]) : await CategorizedList(params.category[0]);
       setMemberId(member_id);
       setcategoryId(params.category[0]);
-      const response : any = await CategorizedList(member_id, params.category[0]);
       setCategorizedList(response);
     }
     initialize();
