@@ -8,6 +8,8 @@ import com.world.alfs.domain.product.Product;
 import com.world.alfs.domain.product.repository.ProductRepository;
 import com.world.alfs.domain.product_img.ProductImg;
 import com.world.alfs.domain.product_img.repostiory.ProductImgRepository;
+import com.world.alfs.domain.special.Special;
+import com.world.alfs.domain.special.repository.SpecialRepository;
 import com.world.alfs.service.product.dto.AddProductDto;
 import com.world.alfs.service.product.dto.RegisterProductDto;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductImgRepository productImgRepository;
+    private final SpecialRepository specialRepository;
 
     public Long addProduct(RegisterProductDto dto) {
         Product product = dto.toEntity();
@@ -75,6 +78,14 @@ public class ProductService {
         for (int i = 0; i < productList.size(); i++) {
             ProductImg img = productImgRepository.findByProductId(productList.get(i).getId());
             productResponseList.add(productList.get(i).toListResponse(img,countPage()));
+
+            Optional<Special> special = specialRepository.findById(productList.get(i).getId());
+            if(special.isPresent()){
+                int status = specialRepository.findByStatus(productList.get(i).getId());
+                if(status == 1){
+                    productResponseList.get(i).setSpecialPrice(special.get().getSalePrice());
+                }
+            }
         }
         return productResponseList;
     }
