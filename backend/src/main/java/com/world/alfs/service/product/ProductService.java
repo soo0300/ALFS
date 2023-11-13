@@ -45,6 +45,14 @@ public class ProductService {
         ProductImg img = productImgRepository.findByProductId(product.getId());
         ProductResponse response = product.toResponse(img);
 
+        Optional<Special> special = specialRepository.findById(product.getId());
+        if (special.isPresent()) {
+            int status = specialRepository.findByStatus(product.getId());
+            if (status == 1) {
+                response.setSpecialPrice(special.get().getSalePrice());
+            }
+        }
+
         return Optional.ofNullable(response);
     }
 
@@ -59,9 +67,9 @@ public class ProductService {
     }
 
     public List<Product> getAllProductId(Long pageCnt, int page) {
-        Long start = (long) ((page-1)*15+1);
-        Long end = start+14;
-        if(pageCnt==page){
+        Long start = (long) ((page - 1) * 15 + 1);
+        Long end = start + 14;
+        if (pageCnt == page) {
             end = countProduct();
         }
         List<Product> productList = productRepository.findByIdBetween(start, end);
@@ -77,12 +85,12 @@ public class ProductService {
         List<GetProductListResponse> productResponseList = new ArrayList<>();
         for (int i = 0; i < productList.size(); i++) {
             ProductImg img = productImgRepository.findByProductId(productList.get(i).getId());
-            productResponseList.add(productList.get(i).toListResponse(img,countPage()));
+            productResponseList.add(productList.get(i).toListResponse(img, countPage()));
 
             Optional<Special> special = specialRepository.findById(productList.get(i).getId());
-            if(special.isPresent()){
+            if (special.isPresent()) {
                 int status = specialRepository.findByStatus(productList.get(i).getId());
-                if(status == 1){
+                if (status == 1) {
                     productResponseList.get(i).setSpecialPrice(special.get().getSalePrice());
                 }
             }
@@ -97,14 +105,14 @@ public class ProductService {
 
     public Long countPage() {
         Long cntProduct = productRepository.count();
-        if(cntProduct%15==0){
-            return cntProduct/15;
-        }else{
-            return cntProduct/15+1;
+        if (cntProduct % 15 == 0) {
+            return cntProduct / 15;
+        } else {
+            return cntProduct / 15 + 1;
         }
     }
 
-    public Long countProduct(){
+    public Long countProduct() {
         return productRepository.count();
     }
 
