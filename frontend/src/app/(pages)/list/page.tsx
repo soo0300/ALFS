@@ -37,6 +37,7 @@ function GetListData() {
       const res: any = await GetList(memberId, newPage);
       setResponse(res);
       setPage(newPage);
+      window.scrollTo(0, 0);
     }
   };
   return (
