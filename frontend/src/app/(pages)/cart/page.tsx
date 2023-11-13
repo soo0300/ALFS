@@ -42,6 +42,9 @@ export default function Page({}: Props) {
   const [selectedCount, setSelectedCount] = useState<number>(0);
   const [mode, setMode] = useState(0);
 
+  const [receipt, setReceipt] = useState<any>();
+  const [payList, setPayList] = useState<any>();
+
   // 해당 상품의 pack에 따라 나눠서 관리 ( 냉동, 냉장, 상온 )
   const toggleFrozenPV = () => {
     setFrozenVisible(!isFrozenVisible);
@@ -174,9 +177,13 @@ export default function Page({}: Props) {
   const ResultPrice = new Intl.NumberFormat().format(totalPrice - totalDiscount + deliveryFee);
 
   const completePay = (e: any) => {
-    setMode(1);
     console.log(e);
+    setMode(1);
+    setReceipt(e[0].data);
+    setPayList(e[1].success_list);
   };
+  console.log(receipt);
+  console.log(payList);
   return (
     <>
       {mode === 0 ? (
@@ -376,9 +383,26 @@ export default function Page({}: Props) {
         </>
       ) : (
         <>
-          <div className="Container mt-[76px] flex flex-col items-center">
+          <div className="Container min-w-[500px] mt-[76px] flex flex-col items-center">
             <span className="text-[36px]">결제내역</span>
-            <div className="MainBox w-[1097px] mt-[20px] ml-[149px] flex"></div>
+            <div className="w-[500px] border-[1px] mt-[50px]">
+              <div className="MainBox w-[500px] my-[20px] ml-[20px]">
+                <p>결제방법 : {receipt?.easyPay.provider}</p>
+                <p>총 결제금액 : {receipt?.easyPay.amount}원</p>
+              </div>
+              <div className="w-[500px] ml-[20px]">
+                {payList.map((item: any, idx: number) => (
+                  <div key={idx} className="flex items-center my-[20px]">
+                    <Image src={item.product.img} alt="" width={100} height={100}></Image>
+                    <div className="ml-[20px]">
+                      <p>{item.product.name}</p>
+                      <p>수량 : {item.count}개</p>
+                      <p>가격 : {item.product.sale}원</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </>
       )}

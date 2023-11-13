@@ -17,6 +17,7 @@ const nextConfig = {
   env: {
     TOSS_PAYMENTS_SECRET_KEY: "test_sk_mBZ1gQ4YVXWOqkW44eM93l2KPoqN",
   },
+  reactStrictMode: false,
 };
 
 module.exports = nextConfig;
