@@ -26,7 +26,7 @@ export default function Page() {
   useEffect(()=>{
     const initialize = async () => {
       const member_id = localStorage.getItem("id")!;
-      const response : any = !member_id ? await CategorizedFilterdList(member_id, params.category[0]) : await CategorizedList(params.category[0]);
+      const response : any = !member_id ? await CategorizedList(params.category[0]) : await CategorizedFilterdList(member_id, params.category[0]);
       setMemberId(member_id);
       setcategoryId(params.category[0]);
       setCategorizedList(response);
@@ -55,7 +55,7 @@ export default function Page() {
                       sale={item.sale}
                       delivery={item.delivery}
                       member_id={memberId}
-                      filterCode={item.filterCode}
+                      filterCode={!item.filterCode ? [] : item.filterCode}
                   />
                 </div>
                 ) 
