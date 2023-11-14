@@ -35,7 +35,6 @@ public class BatchScheduler {
 
     private final SpecialRepository specialRepository;
     private final EventRepository eventRepository;
-    private final EventService eventService;
 
 
     @Scheduled(fixedRate = 1000) // 1초마다
@@ -44,44 +43,42 @@ public class BatchScheduler {
         String parsedTime = currentDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 //        log.debug("현시간:"+parsedTime);
         LocalDateTime parsedDateTime = LocalDateTime.parse(parsedTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        System.out.print(parsedTime + " ");
+//        System.out.print(parsedTime + " ");
         Optional<Event> savedEvent = eventRepository.findById(1L);
-        System.out.println(savedEvent.get().getStart());
         List<Special> specials = specialRepository.findByStart(parsedDateTime);
-        List<Event> events = eventRepository.findByStart(parsedDateTime);
-
-        for (Event event : events) {
-            try {
-                JobParameters jobParameters = new JobParametersBuilder()
-                        .addLong("currentTime", System.currentTimeMillis())
-                        .addLong("eventId", event.getId())
-                        .toJobParameters();
-
-                JobExecution jobExecution = jobLauncher.run(batchJobConfiguration.specialStartJob(), jobParameters);
-
-                // 여기서 JobExecution 결과를 처리하거나 로깅할 수 있습니다.
-                if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
-                    // 성공적으로 완료된 경우의 로직
-                    log.debug("Job Execution: " + jobExecution.getStatus());
-                    log.debug("Job getJobConfigurationName: " + jobExecution.getJobConfigurationName());
-                    log.debug("Job getJobId: " + jobExecution.getJobId());
-                    log.debug("Job getExitStatus: " + jobExecution.getExitStatus());
-                    log.debug("Job getJobInstance: " + jobExecution.getJobInstance());
-                    log.debug("Job getStepExecutions: " + jobExecution.getStepExecutions());
-                    log.debug("Job getLastUpdated: " + jobExecution.getLastUpdated());
-                    log.debug("Job getFailureExceptions: " + jobExecution.getFailureExceptions());
-                } else if (jobExecution.getStatus() == BatchStatus.FAILED) {
-                    // 실패한 경우의 로직
-                    log.debug("jobExecution 이 실패한 경우");
-                }
-            } catch (Exception e) {
-                // 예외 처리 로직
-                log.debug("jobExecution 이 실패했습니다");
-                log.error(e.getMessage());
-            }
-
-            eventService.getEvent(event.getId());
-        }
+//        List<Event> events = eventRepository.findByStart(parsedDateTime);
+//
+//        for (Event event : events) {
+//            try {
+//                JobParameters jobParameters = new JobParametersBuilder()
+//                        .addLong("currentTime", System.currentTimeMillis())
+//                        .addLong("eventId", event.getId())
+//                        .toJobParameters();
+//
+//                JobExecution jobExecution = jobLauncher.run(batchJobConfiguration.specialStartJob(), jobParameters);
+//
+//                // 여기서 JobExecution 결과를 처리하거나 로깅할 수 있습니다.
+//                if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
+//                    // 성공적으로 완료된 경우의 로직
+//                    log.debug("Job Execution: " + jobExecution.getStatus());
+//                    log.debug("Job getJobConfigurationName: " + jobExecution.getJobConfigurationName());
+//                    log.debug("Job getJobId: " + jobExecution.getJobId());
+//                    log.debug("Job getExitStatus: " + jobExecution.getExitStatus());
+//                    log.debug("Job getJobInstance: " + jobExecution.getJobInstance());
+//                    log.debug("Job getStepExecutions: " + jobExecution.getStepExecutions());
+//                    log.debug("Job getLastUpdated: " + jobExecution.getLastUpdated());
+//                    log.debug("Job getFailureExceptions: " + jobExecution.getFailureExceptions());
+//                } else if (jobExecution.getStatus() == BatchStatus.FAILED) {
+//                    // 실패한 경우의 로직
+//                    log.debug("jobExecution 이 실패한 경우");
+//                }
+//            } catch (Exception e) {
+//                // 예외 처리 로직
+//                log.debug("jobExecution 이 실패했습니다");
+//                log.error(e.getMessage());
+//            }
+//
+//        }
 
 //        log.info("specials = {}", specials.toString());
 
