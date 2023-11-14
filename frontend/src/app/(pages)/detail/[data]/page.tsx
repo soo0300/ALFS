@@ -211,15 +211,13 @@ export default function Page() {
             <span className="text-[40px]">{formattedPrice}원</span>
           </div>
           <div className="Submit w-[633px] min-h-[62px] flex justify-end">
-            <button className="SubmitBtn w-[472px] h-[62px] mt-[11px] flex items-center justify-center bg-[#33C130] text-white">
-              <AddToCart
-                id={productData.id}
-                cnt={cnt}
-                member_id={member_id}
-                img={productData.main_img}
-                name={productData.name}
-              />
-            </button>
+            <AddToCart
+              id={productData.id}
+              cnt={cnt}
+              member_id={member_id}
+              img={productData.main_img}
+              name={productData.name}
+            />
           </div>
         </div>
       </div>

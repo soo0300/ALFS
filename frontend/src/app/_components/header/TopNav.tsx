@@ -72,7 +72,9 @@ export default function TopNav() {
         )}
 
         <Menu>
-          <MenuButton>고객센터</MenuButton>
+          <MenuButton>
+            <b>고객센터</b>
+          </MenuButton>
           <MenuList>
             <MenuItem>1:1 문의</MenuItem>
             <MenuItem>상품 문의</MenuItem>
