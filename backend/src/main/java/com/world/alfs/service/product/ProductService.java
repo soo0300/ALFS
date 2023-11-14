@@ -8,7 +8,10 @@ import com.world.alfs.domain.product.Product;
 import com.world.alfs.domain.product.repository.ProductRepository;
 import com.world.alfs.domain.product_img.ProductImg;
 import com.world.alfs.domain.product_img.repostiory.ProductImgRepository;
+import com.world.alfs.domain.special.Special;
+import com.world.alfs.domain.special.repository.SpecialRepository;
 import com.world.alfs.service.product.dto.AddProductDto;
+import com.world.alfs.service.product.dto.RegisterProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.world.alfs.common.exception.ErrorCode.PRODUCT_NOT_FOUND;
-
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -26,8 +27,9 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductImgRepository productImgRepository;
+    private final SpecialRepository specialRepository;
 
-    public Long addProduct(AddProductDto dto) {
+    public Long addProduct(RegisterProductDto dto) {
         Product product = dto.toEntity();
         ProductImg productImg = dto.toImgEntity(product);
         Product savedProduct = productRepository.save(product);
@@ -35,13 +37,11 @@ public class ProductService {
         return savedProduct.getId();
     }
 
-    public Optional<ProductResponse> getProduct(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new CustomException(PRODUCT_NOT_FOUND));
-        ProductImg img = productImgRepository.findByProductId(product.getId());
-        ProductResponse response = product.toResponse(img);
-
-        return Optional.ofNullable(response);
+    public List<Product> getProduct(Long id) {
+        List<Product> productList = new ArrayList<>();
+        Optional<Product> product = productRepository.findById(id);
+        productList.add(product.get());
+        return productList;
     }
 
     public Long setProduct(AddProductDto dto) {
@@ -55,10 +55,9 @@ public class ProductService {
     }
 
     public List<Product> getAllProductId(Long pageCnt, int page) {
-        Long start = (long) ((page-1)*15+1);
-        Long end = start+14;
-        if(pageCnt==page){
-            //마지막 페이지 예외 처리
+        Long start = (long) ((page - 1) * 15 + 1);
+        Long end = start + 14;
+        if (pageCnt == page) {
             end = countProduct();
         }
         List<Product> productList = productRepository.findByIdBetween(start, end);
@@ -74,7 +73,32 @@ public class ProductService {
         List<GetProductListResponse> productResponseList = new ArrayList<>();
         for (int i = 0; i < productList.size(); i++) {
             ProductImg img = productImgRepository.findByProductId(productList.get(i).getId());
-            productResponseList.add(productList.get(i).toListResponse(img,countPage()));
+            productResponseList.add(productList.get(i).toListResponse(img, countPage()));
+
+            Optional<Special> special = specialRepository.findById(productList.get(i).getId());
+            if (special.isPresent()) {
+                int status = specialRepository.findByStatus(productList.get(i).getId());
+                if (status == 1) {
+                    productResponseList.get(i).setSpecialPrice(special.get().getSalePrice());
+                }
+            }
+        }
+        return productResponseList;
+    }
+
+    public List<ProductResponse> getAllProductResponse(List<Product> productList) {
+        List<ProductResponse> productResponseList = new ArrayList<>();
+        for (int i = 0; i < productList.size(); i++) {
+            ProductImg img = productImgRepository.findByProductId(productList.get(i).getId());
+            productResponseList.add(productList.get(i).toListProductResponse(img));
+
+            Optional<Special> special = specialRepository.findById(productList.get(i).getId());
+            if (special.isPresent()) {
+                int status = specialRepository.findByStatus(productList.get(i).getId());
+                if (status == 1) {
+                    productResponseList.get(i).setSpecialPrice(special.get().getSalePrice());
+                }
+            }
         }
         return productResponseList;
     }
@@ -86,14 +110,14 @@ public class ProductService {
 
     public Long countPage() {
         Long cntProduct = productRepository.count();
-        if(cntProduct%15==0){
-            return cntProduct/15;
-        }else{
-            return cntProduct/15+1;
+        if (cntProduct % 15 == 0) {
+            return cntProduct / 15;
+        } else {
+            return cntProduct / 15 + 1;
         }
     }
 
-    public Long countProduct(){
+    public Long countProduct() {
         return productRepository.count();
     }
 

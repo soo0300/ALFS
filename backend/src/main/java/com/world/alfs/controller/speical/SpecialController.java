@@ -52,6 +52,12 @@ public class SpecialController {
         return ApiResponse.ok(saveSpecial);
     }
 
+    @GetMapping("/{memberId}/{id}")
+    public ApiResponse<GetSpecialResponse> getSpecial(@PathVariable Long memberId, @PathVariable Long id){
+        GetSpecialResponse saveSpecial =  specialService.getMemberSpecial(memberId, id);
+        return ApiResponse.ok(saveSpecial);
+    }
+
     @PatchMapping("/{id}")
     public ApiResponse<Long> setSpecial(@PathVariable Long id, @RequestBody SetSpecialReqeust request){
         SetSpecialDto dto = request.toDto();
@@ -59,7 +65,7 @@ public class SpecialController {
         return ApiResponse.ok(saveId);
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}")
     public ApiResponse<Long> deleteSpecial(@PathVariable Long id, @RequestBody DeleteSpecialReqeust request){
         DeleteSpecialDto dto = request.toDto();
         Long deleteId = specialService.deleteSpecial(id, dto);
