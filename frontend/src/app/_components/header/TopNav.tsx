@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button, useToast } from "@chakra-ui/react";
+import { Menu, MenuButton, MenuList, MenuItem, Button, useToast } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -40,7 +40,9 @@ export default function TopNav() {
               로그아웃
             </Button>
             <Link href="/mypage/order">
-              <Button variant="unstyled">마이페이지</Button>
+              <Button variant="unstyled" marginRight="10px">
+                마이페이지
+              </Button>
             </Link>
           </>
         ) : superId ? (
@@ -49,7 +51,9 @@ export default function TopNav() {
               로그아웃
             </Button>
             <Link href="/supervisor/register">
-              <Button variant="unstyled">관리자페이지</Button>
+              <Button variant="unstyled" marginRight="10px">
+                관리자페이지
+              </Button>
             </Link>
           </>
         ) : (
@@ -60,10 +64,22 @@ export default function TopNav() {
               </Button>
             </Link>
             <Link href="/signup">
-              <Button variant="unstyled">회원가입</Button>
+              <Button variant="unstyled" marginRight="10px">
+                회원가입
+              </Button>
             </Link>
           </>
         )}
+
+        <Menu>
+          <MenuButton>
+            <b>고객센터</b>
+          </MenuButton>
+          <MenuList>
+            <MenuItem>1:1 문의</MenuItem>
+            <MenuItem>상품 문의</MenuItem>
+          </MenuList>
+        </Menu>
       </div>
     </div>
   );

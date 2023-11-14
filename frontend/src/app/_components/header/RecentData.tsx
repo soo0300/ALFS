@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai";
+import { useMediaQuery } from "react-responsive";
 
 type Props = {};
 
@@ -35,31 +36,46 @@ export default function RecentData({}: Props) {
     });
   };
 
+  const isDesktop = useMediaQuery({
+    query: "(min-width: 1520px)",
+  });
+
+  // 이후 useState 훅을 통해 해당 컴포넌트에서 desktop 뷰포트인지 식별할 수 있도록 상태를 선언한다.
+  const [desktop, setDesktop] = useState(false);
+
+  useEffect(() => {
+    setDesktop(isDesktop);
+  }, [isDesktop]);
+
   return (
-    <div className="w-[90px] h-[300px] border-[2px] fixed top-[35%] right-[20px] shadow-md bg-white">
-      <p className="mt-[10px] flex justify-center text-[12px]">최근 조회 상품</p>
+    <>
+      {desktop && (
+        <div className="w-[90px] h-[300px] border-[2px] fixed top-[35%] right-[20px] shadow-md bg-white">
+          <p className="mt-[10px] flex justify-center text-[12px]">최근 조회 상품</p>
 
-      <div className="flex justify-center my-[10px]">
-        <button onClick={handleButtonUp}>
-          <AiOutlineArrowUp />
-        </button>
-      </div>
-
-      <div ref={scrollContainerRef} className=" h-[200px] overflow-hidden scrollbar-hide z-10">
-        {data?.map((item: any, idx) => (
-          <div key={idx} className="flex justify-center my-[5px]">
-            <Link href={`/detail/${item.id}`}>
-              <Image src={item.image} width={50} height={50} alt=""></Image>
-            </Link>
+          <div className="flex justify-center my-[10px]">
+            <button onClick={handleButtonUp}>
+              <AiOutlineArrowUp />
+            </button>
           </div>
-        ))}
-      </div>
 
-      <div className="flex justify-center mt-[10px]">
-        <button onClick={handleButtonDown}>
-          <AiOutlineArrowDown />
-        </button>
-      </div>
-    </div>
+          <div ref={scrollContainerRef} className=" h-[200px] overflow-hidden scrollbar-hide z-10">
+            {data?.map((item: any, idx) => (
+              <div key={idx} className="flex justify-center my-[5px]">
+                <Link href={`/detail/${item.id}`}>
+                  <Image src={item.image} width={50} height={50} alt=""></Image>
+                </Link>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-center mt-[10px]">
+            <button onClick={handleButtonDown}>
+              <AiOutlineArrowDown />
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
