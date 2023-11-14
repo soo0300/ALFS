@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 @RestController
@@ -50,7 +51,7 @@ public class ProductController {
     public ApiResponse<List<GetProductListResponse>> getProduct(@PathVariable Long memberId, @PathVariable Long id) {
         List<Product> product = productService.getProduct(id);
         List<GetProductListResponse> response = productService.getAllProduct(product);
-        allergy_filter(product,response,memberId);
+        allergy_filter(product, response, memberId);
         return ApiResponse.ok(response);
     }
 
@@ -67,10 +68,10 @@ public class ProductController {
         return ApiResponse.ok(productCnt);
     }
 
-    @GetMapping("/all")
-    public ApiResponse<List<GetProductListResponse>> getAllProduct() {
-        List<Product> productList = productService.findAll();
-        List<GetProductListResponse> response = productService.getAllProduct(productList);
+    @GetMapping("/all/{page}")
+    public ApiResponse<List<GetProductListResponse>> getAllProduct(@PathVariable Integer page) {
+        List<Product> product_list = productService.getAllProductId(productService.countPage(), page);
+        List<GetProductListResponse> response = productService.getAllProduct(product_list);
         return ApiResponse.ok(response);
     }
 
