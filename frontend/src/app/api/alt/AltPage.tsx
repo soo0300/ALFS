@@ -20,10 +20,11 @@ export async function AlterDetail(catName: string) {
   }
 }
 
-export async function AlterAll(alternativeCategoryList: Array<string>) {
+export async function AlterAll(props: any) {
   try {
-    const res = await baseAxios.post(`api/alternative/all`, {
-      alternativeCategoryList: alternativeCategoryList,
+    const member_id = localStorage.getItem("id");
+    const res = await baseAxios.post(`api/alternative/all/${member_id}`, {
+      alternativeCategoryList: props,
     });
     return res.data.data;
   } catch (e) {

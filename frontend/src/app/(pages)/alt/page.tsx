@@ -16,16 +16,14 @@ export default function Page({}: Props) {
   const [alterList, setAlterList] = useState<Array<string>>([]);
   const [selectedButtonIndices, setSelectedButtonIndices] = useState<number[]>([]);
   const [totalCnt, setTotalCnt] = useState<number>(0);
-  const [alterProduct, setAlterProduct] = useState<any>();
+  const [alterProduct, setAlterProduct] = useState<any>([]);
   useEffect(() => {
     const fetchAlterData = async () => {
       const res: any = await AlterList();
-      console.log(res);
       setAlterList(res);
       const CatName: Array<string> = res.map((item: any) => item.alternativeName);
-      console.log("카테고리이름", CatName);
       const Allres: Array<string> = await AlterAll(CatName);
-      console.log("대체식품 전체조회", Allres, Allres);
+      console.log("대체식품 전체조회", Allres);
       setAlterProduct(Allres);
       setTotalCnt(Allres.length);
     };
@@ -55,13 +53,14 @@ export default function Page({}: Props) {
             </button>
           ))}
       </div>
-      {alterProduct && (
-        <div className="Container flex flex-col justify-center w-[1000px] h-auto mt-[124px]">
-          총 {totalCnt}건
-          <hr />
-          <div className="grid grid-cols-3 mx-auto mt-[10px]">
-            {alterProduct.map((item: any) => {
-              <div key={item.id} className="w-[178px] h-[450px] ml-[44px]">
+
+      <div className="flex flex-col justify-center w-[1000px] h-auto mt-[124px]">
+        총 {totalCnt}건
+        <hr />
+        <div className="grid grid-cols-3 mx-auto mt-[10px]">
+          {alterProduct.length > 0 ? (
+            alterProduct.map((item: any, index: number) => (
+              <div key={index} className="w-[178px] h-[450px] ml-[44px]">
                 <Card
                   name={item.name}
                   image={item.img}
@@ -71,11 +70,13 @@ export default function Page({}: Props) {
                   sale={item.sale}
                   filterCode={item.filterCode}
                 />
-              </div>;
-            })}
-          </div>
+              </div>
+            ))
+          ) : (
+            <p>데이터가 없습니다.</p>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
