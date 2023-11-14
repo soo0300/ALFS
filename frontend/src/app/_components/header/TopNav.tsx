@@ -76,7 +76,7 @@ export default function TopNav() {
             <b>고객센터</b>
           </MenuButton>
           <MenuList>
-            <Link href="/board">
+            <Link href="/board/all">
               <MenuItem>1:1 문의</MenuItem>
             </Link>
           </MenuList>
