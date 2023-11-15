@@ -19,7 +19,7 @@ export async function ProductCnt() {
 }
 
 export async function ProductSearch(props: string) {
-  const id = localStorage.getItem("id");
+  const id = localStorage.getItem("id") || 0;
   try {
     const res = await baseAxios.get(`api/product/search/${props}/${id}`);
     return res.data.data;
