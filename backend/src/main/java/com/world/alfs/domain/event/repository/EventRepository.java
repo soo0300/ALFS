@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByStart(LocalDateTime parsedDateTime);
+
+    List<Event> findByEnd(LocalDateTime parsedDateTime);
 }
