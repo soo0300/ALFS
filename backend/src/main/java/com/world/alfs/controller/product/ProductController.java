@@ -68,9 +68,9 @@ public class ProductController {
         return ApiResponse.ok(productCnt);
     }
 
-    @GetMapping("/all/{page}")
-    public ApiResponse<List<GetProductListResponse>> getAllProduct(@PathVariable Integer page) {
-        List<Product> product_list = productService.getAllProductId(productService.countPage(), page);
+    @GetMapping("/all")
+    public ApiResponse<List<GetProductListResponse>> getAllProduct() {
+        List<Product> product_list = productService.findAll();
         List<GetProductListResponse> response = productService.getAllProduct(product_list);
         return ApiResponse.ok(response);
     }
@@ -110,6 +110,21 @@ public class ProductController {
         deleteAllRelatedProduct(id);
         Long savedProductId = productService.deleteProduct(id);
         return ApiResponse.ok(savedProductId);
+    }
+
+    @GetMapping("/search/{word}/{memberId}")
+    public ApiResponse<List<GetProductListResponse>> getSearchResultProduct(@PathVariable String word, @PathVariable Long memberId) {
+        List<Product> product_list = productService.getSearchResultProduct(word);
+        List<GetProductListResponse> response = productService.getAllProduct(product_list);
+        allergy_filter(product_list, response, memberId);
+        return ApiResponse.ok(response);
+    }
+
+    @GetMapping("/search/{word}")
+    public ApiResponse<List<GetProductListResponse>> getSearchResultProduct(@PathVariable String word) {
+        List<Product> product_list = productService.getSearchResultProduct(word);
+        List<GetProductListResponse> response = productService.getAllProduct(product_list);
+        return ApiResponse.ok(response);
     }
 
 
