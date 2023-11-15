@@ -35,7 +35,7 @@ public class BatchScheduler {
     private final EventRepository eventRepository;
 
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(cron = "0 * * * * *") // 매 분의 0초에 실행
     public void runSpecialStartJob() {
         LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         currentDateTime = currentDateTime.withSecond(0).withNano(0);
@@ -113,7 +113,7 @@ public class BatchScheduler {
         }
     }
 
-    @Scheduled(fixedRate = 1000) // 1초마다
+    @Scheduled(cron = "0 * * * * *") // 매 분의 0초에 실행
     public void runSpecialEndJob() {
         LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         String parsedTime = currentDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
