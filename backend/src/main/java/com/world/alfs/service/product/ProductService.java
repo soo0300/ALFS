@@ -59,6 +59,21 @@ public class ProductService {
     public Long setProduct(AddProductDto dto) {
         Optional<Product> product = productRepository.findById(dto.getId());
         product.get().setProduct(dto);
+
+        HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
+        String productIdKey = String.valueOf(dto.getId());
+        Object saleValue = hashOperations.get("saleCache", productIdKey);
+
+        if (saleValue != null) {
+            try {
+                hashOperations.put("saleCache", productIdKey, String.valueOf(dto.getSale()));
+            } catch (NumberFormatException e) {
+                log.error("Failed to parse and update sale value in Redis: {}", e.getMessage());
+            }
+        } else {
+            log.warn("Sale value not found in Redis for productId: {}", dto.getId());
+        }
+
         return product.get().getId();
     }
 
