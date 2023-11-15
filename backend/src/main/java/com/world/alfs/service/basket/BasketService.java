@@ -190,11 +190,23 @@ public class BasketService {
         Basket purchasedBasket = basketRepository.save(basket);
         Product product = purchasedBasket.getProduct();
         ProductImg img = productImgRepository.findByProductId(product.getId());
+
+        GetProductListResponse getProductListResponse = product.toListResponse(img,null);
+
+        // 특가 상품의 경우 할인된 가격 적용
+        Optional<Special> special = specialRepository.findById(product.getId());
+        if (special.isPresent()) {
+            int status = specialRepository.findByStatus(product.getId());
+            if (status == 1) {
+                getProductListResponse.setSpecialPrice(special.get().getSalePrice());
+                log.debug("특가 상품 salePrice: {}", special.get().getSalePrice());
+            }
+        }
         return GetPurchaseResponse.builder()
                 .basket_id(purchasedBasket.getId())
                 .count(purchasedBasket.getCount())
                 .totalPrice(purchasedBasket.getPurchase())
-                .getProductListResponse(product.toListResponse(img,null))
+                .getProductListResponse(getProductListResponse)
                 .date(purchasedBasket.getPurchaseDate())
                 .build();
     }
