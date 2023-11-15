@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
@@ -35,6 +36,7 @@ public class BatchJobConfiguration {
     private final EntityManagerFactory entityManagerFactory;
     private final JobCompletionNotificationListener jobCompletionNotificationListener;
     private final SpecialRepository specialRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     private static final String JOB_START_NAME = "specialStartJob";
     private static final String START_STEP_NAME = "specialStartStep";
@@ -59,8 +61,9 @@ public class BatchJobConfiguration {
         // log.info("specialStartJob");
         return jobBuilderFactory.get(JOB_END_NAME)
                 .start(specialEndStep())
+                .next(productEndStep())
                 .incrementer(new RunIdIncrementer()) // listener 추가 가능
-//                .listener(jobCompletionNotificationListener)
+                .listener(jobCompletionNotificationListener)
                 .build();
     }
 
@@ -114,6 +117,17 @@ public class BatchJobConfiguration {
                 .reader(customEndItemReader(0L, 0L))
                 .processor(customEndItemProcessor())
                 .writer(customEndItemWriter())
+                .build();
+    }
+
+    @Bean
+    public Step productEndStep() {
+        log.info("productEndStep");
+        return stepBuilderFactory.get(END_STEP_NAME)
+                .<Product, Product>chunk(CHUNK_SIZE)
+                .reader(customProductEndItemReader(0L, 0L))
+                .processor(customProductEndItemProcessor())
+                .writer(customProductEndItemWriter())
                 .build();
     }
 
@@ -263,6 +277,30 @@ public class BatchJobConfiguration {
                 .build();
     }
 
+
+    @Bean
+    @StepScope
+    public JpaCursorItemReader<Product> customProductEndItemReader(@Value("#{jobParameters['supervisorId']}") Long supervisorId, @Value("#{jobParameters['productId']}") Long productId) {
+        log.info("customProductEndItemReader");
+        log.debug("jobParameter 확인: " + supervisorId + " " + productId);
+        if (supervisorId.equals(0L) || productId.equals(0L)) {
+            throw new IllegalArgumentException("supervisorId와 productId는 필수 파라미터입니다.");
+        }
+
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("productId", productId);
+
+        String queryString = "select s from Product s where s.id = :productId";
+        log.debug("쿼리 확인: " + queryString);
+
+        return new JpaCursorItemReaderBuilder<Product>()
+                .name("jpaCursorItemReader")
+                .entityManagerFactory(entityManagerFactory)
+                .queryString(queryString)
+                .parameterValues(parameters)
+                .build();
+    }
+
     @Bean
     @StepScope
     public ItemProcessor<Special, Special> customStartItemProcessor() {
@@ -305,6 +343,13 @@ public class BatchJobConfiguration {
 
     @Bean
     @StepScope
+    public ItemProcessor<Product, Product> customProductEndItemProcessor() {
+        log.info("customProductEndItemProcessor");
+        return new CustomJpaProductEndItemProcessor(entityManagerFactory, redisTemplate);
+    }
+
+    @Bean
+    @StepScope
     @Transactional
     public JpaItemWriter<Special> customStartItemWriter() {
         // log.info("customItemWriter");
@@ -327,6 +372,16 @@ public class BatchJobConfiguration {
     @StepScope
     @Transactional
     public JpaItemWriter<Product> customProductStartItemWriter() {
+        log.info("customItemWriter");
+        JpaItemWriter<Product> itemWriter = new JpaItemWriter<>();
+        itemWriter.setEntityManagerFactory(entityManagerFactory);
+        return itemWriter;
+    }
+
+    @Bean
+    @StepScope
+    @Transactional
+    public JpaItemWriter<Product> customProductEndItemWriter() {
         log.info("customItemWriter");
         JpaItemWriter<Product> itemWriter = new JpaItemWriter<>();
         itemWriter.setEntityManagerFactory(entityManagerFactory);
