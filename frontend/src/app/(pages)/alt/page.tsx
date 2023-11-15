@@ -4,6 +4,7 @@ import { AlterList, AlterDetail, AlterAll } from "@/app/api/alt/AltPage";
 import React, { useState, useEffect } from "react";
 import Loading from "@/app/_components/loading/loading";
 import dynamic from "next/dynamic";
+import Carousel from "@/app/_components/banner/Banner";
 
 type Props = {};
 
@@ -14,7 +15,7 @@ const Card = dynamic(() => import("../../_components/card/Card"), {
 
 export default function Page({}: Props) {
   const [alterList, setAlterList] = useState<Array<string>>([]);
-  const [selectedButtonIndices, setSelectedButtonIndices] = useState<number[]>([]);
+  const [selectedButtonIndices, setSelectedButtonIndices] = useState<number>(0);
   const [totalCnt, setTotalCnt] = useState<number>(0);
   const [alterProduct, setAlterProduct] = useState<any>([]);
   useEffect(() => {
@@ -23,31 +24,49 @@ export default function Page({}: Props) {
       setAlterList(res);
       const CatName: Array<string> = res.map((item: any) => item.alternativeName);
       const Allres: Array<string> = await AlterAll(CatName);
-      console.log("대체식품 전체조회", Allres);
       setAlterProduct(Allres);
       setTotalCnt(Allres.length);
     };
     fetchAlterData();
   }, []);
 
-  const handleButtonClick = (index: number) => {
-    if (selectedButtonIndices.includes(index)) {
-      setSelectedButtonIndices(selectedButtonIndices.filter((i) => i !== index));
-    } else {
-      setSelectedButtonIndices([...selectedButtonIndices, index]);
+  const handleButtonClick = async (index: number, alternativeName: string) => {
+    setSelectedButtonIndices(index);
+    const encodedAlternativeName = encodeURIComponent(alternativeName);
+    try {
+      if (alternativeName !== "전체") {
+        const SelectedRes: any = await AlterDetail(encodedAlternativeName);
+        setAlterProduct(SelectedRes);
+        setTotalCnt(SelectedRes.length);
+      } else {
+        const CatName: Array<string> = alterList.map((item: any) => item.alternativeName);
+        const Allres: Array<string> = await AlterAll(CatName);
+        setAlterProduct(Allres);
+        setTotalCnt(Allres.length);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
   return (
     <div className="flex flex-col items-center">
+      <Carousel></Carousel>
       <span className="text-[30px]">대체식품</span>
       <div className="grid grid-cols-5 gap-4 w-800 border border-[#33C130] p-4">
+        <button
+          key={0}
+          onClick={() => handleButtonClick(0, "전체")}
+          className={`text-center ${selectedButtonIndices === 0 ? "text-[#33C130]" : ""}`}
+        >
+          <div>전체보기</div>
+        </button>
         {alterList &&
           alterList.map((item: any, index: number) => (
             <button
-              key={index}
-              onClick={() => handleButtonClick(index)}
-              className={`text-center ${selectedButtonIndices.includes(index) ? "text-[#33C130]" : ""}`}
+              key={index + 1}
+              onClick={() => handleButtonClick(index + 1, item.alternativeName)}
+              className={`text-center ${selectedButtonIndices === index + 1 ? "text-[#33C130]" : ""}`}
             >
               <div>{item.alternativeName}</div>
             </button>
