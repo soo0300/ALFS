@@ -13,6 +13,8 @@ import com.world.alfs.domain.special.repository.SpecialRepository;
 import com.world.alfs.service.product.dto.AddProductDto;
 import com.world.alfs.service.product.dto.RegisterProductDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,13 +56,26 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public List<Product> getAllProductId(Long pageCnt, int page) {
+    public List<Product> getAllProductId(Long pageCnt, int page, int status) {
         Long start = (long) ((page - 1) * 15 + 1);
         Long end = start + 14;
         if (pageCnt == page) {
             end = countProduct();
         }
-        List<Product> productList = productRepository.findByIdBetween(start, end);
+
+        List<Product> productList;
+        if (status == 0) { // id 낮은 순 (최신순)
+            productList = productRepository.findByIdBetween(start, end);
+        } else if (status == 1) { // sale 높은순
+            PageRequest pageRequest = PageRequest.of(page - 1, 15);
+            Page<Product> productPage = productRepository.findAllByOrderBySaleDescIdAsc(pageRequest);
+            productList = productPage.getContent();
+        } else {
+            PageRequest pageRequest = PageRequest.of(page - 1, 15);
+            Page<Product> productPage = productRepository.findAllByOrderBySaleAscIdAsc(pageRequest);
+            productList = productPage.getContent();
+        }
+
         return productList;
     }
 
