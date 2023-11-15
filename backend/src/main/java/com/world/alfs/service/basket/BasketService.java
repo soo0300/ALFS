@@ -22,6 +22,7 @@ import com.world.alfs.domain.special.Special;
 import com.world.alfs.domain.special.repository.SpecialRepository;
 import com.world.alfs.service.basket.dto.AddBasketDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Transactional
+@Slf4j
 public class BasketService {
     private final BasketRepository basketRepository;
     private final MemberRepository memberRepository;
@@ -56,6 +58,16 @@ public class BasketService {
             ProductImg img = productImgRepository.findByProductId(product.getId());
 
             GetProductListResponse getProductListResponse = product.toListResponse(img,null);
+
+            // 특가 상품의 경우 할인된 가격 적용
+            Optional<Special> special = specialRepository.findById(product.getId());
+            if (special.isPresent()) {
+                int status = specialRepository.findByStatus(product.getId());
+                if (status == 1) {
+                    getProductListResponse.setSpecialPrice(special.get().getSalePrice());
+                    log.debug("특가 상품 salePrice: {}", special.get().getSalePrice());
+                }
+            }
 
             // 알러지 및 기피 필터링
             Set<Integer> filterCode = new HashSet<>();
@@ -128,6 +140,7 @@ public class BasketService {
 
         GetProductListResponse getProductListResponse = product.toListResponse(img,null);
 
+        // 특가 상품의 경우 할인된 가격 적용
         Optional<Special> special = specialRepository.findById(product.getId());
         if (special.isPresent()) {
             int status = specialRepository.findByStatus(product.getId());
@@ -171,17 +184,41 @@ public class BasketService {
         Basket basket = basketRepository.findById(basket_id).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 장바구니 입니다."));
         if (basket.getStatus() != 0) throw new Exception("삭제 혹은 결제된 장바구니입니다.");
         if (basket.getMember().getId() != member_id) throw new Exception("권한이 없습니다.");
-        basket.setPurchase(basket.getProduct().getSale());
+
+        // 특가 상품의 경우 할인된 가격 적용
+        Optional<Special> special = specialRepository.findById(basket.getProduct().getId());
+        if (special.isPresent()) {
+            int status = specialRepository.findByStatus(basket.getProduct().getId());
+            if (status == 1) {
+                basket.setPurchase(special.get().getSalePrice());
+                log.debug("특가 상품 salePrice: {}", special.get().getSalePrice());
+            }
+        } else {
+            basket.setPurchase(basket.getProduct().getSale());
+        }
+
         basket.setStatus(1);
         basket.setPurchaseDate(LocalDate.now().toString());
         Basket purchasedBasket = basketRepository.save(basket);
         Product product = purchasedBasket.getProduct();
         ProductImg img = productImgRepository.findByProductId(product.getId());
+
+        GetProductListResponse getProductListResponse = product.toListResponse(img,null);
+
+        // 특가 상품의 경우 할인된 가격 적용
+
+        if (special.isPresent()) {
+            int status = specialRepository.findByStatus(product.getId());
+            if (status == 1) {
+                getProductListResponse.setSpecialPrice(special.get().getSalePrice());
+                log.debug("특가 상품 salePrice: {}", special.get().getSalePrice());
+            }
+        }
         return GetPurchaseResponse.builder()
                 .basket_id(purchasedBasket.getId())
                 .count(purchasedBasket.getCount())
                 .totalPrice(purchasedBasket.getPurchase())
-                .getProductListResponse(product.toListResponse(img,null))
+                .getProductListResponse(getProductListResponse)
                 .date(purchasedBasket.getPurchaseDate())
                 .build();
     }
@@ -198,6 +235,16 @@ public class BasketService {
             ProductImg img = productImgRepository.findByProductId(product.getId());
 
             GetProductListResponse getProductListResponse = product.toListResponse(img,null);
+
+            // 특가 상품의 경우 할인된 가격 적용
+            Optional<Special> special = specialRepository.findById(product.getId());
+            if (special.isPresent()) {
+                int status = specialRepository.findByStatus(product.getId());
+                if (status == 1) {
+                    getProductListResponse.setSpecialPrice(special.get().getSalePrice());
+                    log.debug("특가 상품 salePrice: {}", special.get().getSalePrice());
+                }
+            }
 
             // 알러지 및 기피 필터링
             Set<Integer> filterCode = new HashSet<>();
