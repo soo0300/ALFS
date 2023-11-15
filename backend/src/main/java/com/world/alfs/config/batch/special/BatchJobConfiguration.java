@@ -146,12 +146,19 @@ public class BatchJobConfiguration {
         return new CustomJpaEndItemProcessor(entityManagerFactory);
     }
 
-//    @Bean
-//    @StepScope
-//    public ItemProcessor<Event, Event> customStartItemProcessor2() {
-//        // log.info("customItemProcessor");
-//        return new CustomJpaStartItemProcessor(entityManagerFactory);
-//    }
+    @Bean
+    @StepScope
+    public ItemProcessor<Event, Event> customStartItemProcessor2() {
+        // log.info("customItemProcessor");
+        return new CustomJpaStartItemProcessor2(entityManagerFactory);
+    }
+
+    @Bean
+    @StepScope
+    public ItemProcessor<Event, Event> customEndItemProcessor2() {
+        // log.info("customItemProcessor");
+        return new CustomJpaEndItemProcessor2(entityManagerFactory);
+    }
 
 
     @Bean
