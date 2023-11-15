@@ -35,7 +35,7 @@ public class BatchScheduler {
     private final EventRepository eventRepository;
 
 
-    @Scheduled(fixedRate = 1000) // 1초마다
+    @Scheduled(fixedRate = 600000) // 10분단위
     public void runSpecialStartJob() {
         LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         String parsedTime = currentDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
