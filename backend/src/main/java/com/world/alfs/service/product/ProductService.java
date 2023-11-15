@@ -129,6 +129,18 @@ public class ProductService {
 
     public Long deleteProduct(Long id) {
         productRepository.deleteById(id);
+
+        HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
+        String productIdKey = String.valueOf(id);
+
+        Long deletedFieldsCount = hashOperations.delete("saleCache", productIdKey);
+
+        if (deletedFieldsCount != null && deletedFieldsCount > 0) {
+            log.info("Successfully deleted the field for productId: {}", id);
+        } else {
+            log.warn("No field found to delete for productId: {}", id);
+        }
+
         return id;
     }
 
