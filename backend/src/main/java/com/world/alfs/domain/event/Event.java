@@ -1,5 +1,6 @@
 package com.world.alfs.domain.event;
 
+import com.world.alfs.controller.event.response.GetEventResponse;
 import com.world.alfs.domain.supervisor.Supervisor;
 import lombok.*;
 
@@ -8,9 +9,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Event {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -68,4 +69,11 @@ public class Event {
         this.supervisor = supervisor;
     }
 
+    public GetEventResponse toResponse() {
+        return GetEventResponse.builder()
+                .case1(this.case1)
+                .case2(this.case2)
+                .title(this.title)
+                .build();
+    }
 }

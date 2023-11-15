@@ -7,20 +7,17 @@ import org.springframework.batch.item.ItemProcessor;
 
 import javax.persistence.EntityManagerFactory;
 
+
 @Slf4j
-public class CustomJpaEndItemProcessor implements ItemProcessor<Special, Special> {
-
+public class CustomJpaStartItemProcessor2 implements ItemProcessor<Event, Event> {
     private final EntityManagerFactory entityManagerFactory;
-
-    public CustomJpaEndItemProcessor(EntityManagerFactory entityManagerFactory) {
+    public CustomJpaStartItemProcessor2(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
-
     @Override
-    public Special process(Special item) {
+    public Event process(Event item) {
         log.info("process");
-        item.setStatus(2); // Special 객체의 status를 1에서 2로 변경
+        item.setStatus(1); // Special 객체의 status를 0에서 1로 변경
         return item;
     }
-
 }
