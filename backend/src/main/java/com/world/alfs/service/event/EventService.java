@@ -36,6 +36,7 @@ public class EventService {
         case1_rate = (case1_rate / (case1_rate + case2_rate)) * 100;
         case2_rate = 100 - case1_rate;
         return EventResponse.builder()
+                .id(dto.getId())
                 .case1_rate((int)case1_rate)
                 .case2_rate((int)case2_rate)
                 .build();
@@ -48,7 +49,8 @@ public class EventService {
     }
 
     public GetEventResponse findEvent() {
-        Event event = eventRepository.findByStatus(1);
-        return event.toResponse();
+        Optional<Event> event = Optional.ofNullable(eventRepository.findByStatus(1));
+        if(event.isEmpty()) return null;
+        return event.get().toResponse();
     }
 }
