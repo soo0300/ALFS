@@ -3,6 +3,8 @@ package com.world.alfs.controller.speical.response;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Builder
@@ -30,6 +32,9 @@ public class GetSpecialListResponse {
     private int productCategory;
 
     private String productImg;
+    private Set<Integer> filterCode;
+    private List<String> hates;
+    private List<String> allergies;
 
     // special
     private Long supervisorId;
@@ -40,4 +45,14 @@ public class GetSpecialListResponse {
     private LocalDateTime end;
 
 
+    public void setCode(Set<Integer> filterCode) {
+        this.filterCode = filterCode;
+    }
+    public void setAllergyDetail(List<String> str) {
+        this.allergies = str;
+    }
+
+    public void setHateDetail(List<String> str) {
+        this.hates = str;
+    }
 }
