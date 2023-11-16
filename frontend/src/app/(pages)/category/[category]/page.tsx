@@ -75,7 +75,7 @@ export default function Page() {
                       title={item.title}
                       price={item.price}
                       sale={item.sale}
-                      filterCode={!item.filterCode ? [] : item.filterCode}
+                      filterCode={!item.filterCode ? [3] : item.filterCode}
                       hates={item.hates}
                       allergies={item.allergies}
                     />
