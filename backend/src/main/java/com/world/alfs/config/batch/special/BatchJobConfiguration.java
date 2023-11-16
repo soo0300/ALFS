@@ -1,5 +1,6 @@
 package com.world.alfs.config.batch.special;
 
+import com.world.alfs.domain.basket.Basket;
 import com.world.alfs.domain.event.Event;
 import com.world.alfs.domain.product.Product;
 import com.world.alfs.domain.special.Special;
@@ -62,6 +63,7 @@ public class BatchJobConfiguration {
         return jobBuilderFactory.get(JOB_END_NAME)
                 .start(specialEndStep())
                 .next(productEndStep())
+                .next(basketEndStep())
                 .incrementer(new RunIdIncrementer()) // listener 추가 가능
                 .listener(jobCompletionNotificationListener)
                 .build();
@@ -128,6 +130,17 @@ public class BatchJobConfiguration {
                 .reader(customProductEndItemReader(0L, 0L))
                 .processor(customProductEndItemProcessor())
                 .writer(customProductEndItemWriter())
+                .build();
+    }
+
+    @Bean
+    public Step basketEndStep() {
+//        log.info("basketEndStep");
+        return stepBuilderFactory.get(END_STEP_NAME)
+                .<Basket, Basket>chunk(CHUNK_SIZE)
+                .reader(customBasketEndItemReader(0L, 0L))
+                .processor(customBasketEndItemProcessor())
+                .writer(customBasketEndItemWriter())
                 .build();
     }
 
@@ -303,6 +316,29 @@ public class BatchJobConfiguration {
 
     @Bean
     @StepScope
+    public JpaCursorItemReader<Basket> customBasketEndItemReader(@Value("#{jobParameters['supervisorId']}") Long supervisorId, @Value("#{jobParameters['productId']}") Long productId) {
+//        log.info("customBasketEndItemReader");
+//        log.debug("jobParameter 확인: " + supervisorId + " " + productId);
+        if (supervisorId.equals(0L) || productId.equals(0L)) {
+            throw new IllegalArgumentException("supervisorId와 productId는 필수 파라미터입니다.");
+        }
+
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("productId", productId);
+
+        String queryString = "select s from Basket s where s.product.id = :productId";
+//        log.debug("쿼리 확인: " + queryString);
+
+        return new JpaCursorItemReaderBuilder<Basket>()
+                .name("jpaCursorItemReader")
+                .entityManagerFactory(entityManagerFactory)
+                .queryString(queryString)
+                .parameterValues(parameters)
+                .build();
+    }
+
+    @Bean
+    @StepScope
     public ItemProcessor<Special, Special> customStartItemProcessor() {
         // log.info("customItemProcessor");
         return new CustomJpaStartItemProcessor(entityManagerFactory);
@@ -350,6 +386,13 @@ public class BatchJobConfiguration {
 
     @Bean
     @StepScope
+    public ItemProcessor<Basket, Basket> customBasketEndItemProcessor() {
+//        log.info("customBasketEndItemProcessor");
+        return new CustomJpaBasketEndItemProcessor(entityManagerFactory);
+    }
+
+    @Bean
+    @StepScope
     @Transactional
     public JpaItemWriter<Special> customStartItemWriter() {
         // log.info("customItemWriter");
@@ -384,6 +427,16 @@ public class BatchJobConfiguration {
     public JpaItemWriter<Product> customProductEndItemWriter() {
         log.info("customItemWriter");
         JpaItemWriter<Product> itemWriter = new JpaItemWriter<>();
+        itemWriter.setEntityManagerFactory(entityManagerFactory);
+        return itemWriter;
+    }
+
+    @Bean
+    @StepScope
+    @Transactional
+    public JpaItemWriter<Basket> customBasketEndItemWriter() {
+//        log.info("customBasketEndItemWriter");
+        JpaItemWriter<Basket> itemWriter = new JpaItemWriter<>();
         itemWriter.setEntityManagerFactory(entityManagerFactory);
         return itemWriter;
     }
