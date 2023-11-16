@@ -82,13 +82,13 @@ export default function NextStep(props: any) {
   };
   return (
     <div>
-      <div className="mb-[20px]">
+      <div className="my-[20px]">
         <Accordion allowToggle>
           <AccordionItem>
             <h2>
               <AccordionButton>
                 <Box as="span" flex="1" textAlign="left">
-                  원재료 추출내역
+                  원재료 추출내역 (클릭하면 아래에 원재료추출내역이 나옵니다.)
                 </Box>
                 <AccordionIcon />
               </AccordionButton>
