@@ -76,6 +76,9 @@ public class SpecialService {
         Special special = dto.toEntity(product, supervisor);
         specialRepository.save(special);
 
+        // redis에 특가 상품 수량 추가
+        addSpecialCnt(dto.getProductId(), String.valueOf(dto.getCount()));
+
         return special.getId();
     }
 
