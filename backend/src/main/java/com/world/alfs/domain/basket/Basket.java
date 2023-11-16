@@ -79,4 +79,6 @@ public class Basket {
     public void setPurchaseDate(String purchaseDate) {
         this.purchaseDate = purchaseDate;
     }
+
+    public void setIsBigSale(boolean isBigSale) { this.isBigSale = isBigSale; }
 }
