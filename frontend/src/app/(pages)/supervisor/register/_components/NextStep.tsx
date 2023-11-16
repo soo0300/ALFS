@@ -60,8 +60,8 @@ export default function NextStep(props: any) {
   const router = useRouter();
 
   const registerProduct = async (e: any) => {
+    setShow(true);
     const data = e;
-    console.log(e);
     data["img_1"] = props.props.imgUrls[0];
     data["img_2"] = props.props.imgUrls[1];
     data["img_3"] = props.props.imgUrls[2];
@@ -316,8 +316,9 @@ export default function NextStep(props: any) {
             {...register("manufacture")}
           ></Textarea>
         </FormControl>
+        <div></div>
         <div className="flex justify-evenly mt-[20px]">
-          <Button width={300} variant="outline" colorScheme="whatsapp" type="submit">
+          <Button width={300} variant="outline" colorScheme="whatsapp" type="submit" isLoading={show}>
             상품 등록하기
           </Button>
         </div>
