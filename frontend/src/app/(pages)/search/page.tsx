@@ -47,6 +47,7 @@ export default function Page({}: Props) {
                     filterCode={!item.filterCode ? [] : item.filterCode}
                     hates={item.hates}
                     allergies={item.allergies}
+                    isSpecial={item.isSpecial}
                   />
                 </div>
               ))}

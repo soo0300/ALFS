@@ -16,6 +16,7 @@ import { AddProductToCart } from "@/app/api/cart/CartPage";
 import { LuShoppingCart } from "react-icons/lu";
 import Image from "next/image";
 import CartAlert from "./CartAlert";
+import { AddCartSpecial } from "@/app/api/special/special";
 
 type CardProps = {
   id: number;
@@ -23,8 +24,9 @@ type CardProps = {
   name: string;
   price: number;
   sale: number;
+  isSpecial: boolean;
 };
-export default function AddToCartFromList({ id, image, name, price, sale }: CardProps) {
+export default function AddToCartFromList({ id, image, name, price, sale, isSpecial }: CardProps) {
   const [cnt, setCnt] = useState<number>(1);
   const changeCount = (operator: string) => {
     if (id) {
@@ -44,7 +46,14 @@ export default function AddToCartFromList({ id, image, name, price, sale }: Card
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [show, setShow] = useState(false);
   const AddCart = async (id: string, cnt: number) => {
-    const response: any = await AddProductToCart(id, cnt);
+    console.log("스페셜상태", isSpecial);
+    if (isSpecial) {
+      const response: any = await AddCartSpecial(id);
+      console.log(response, "스페셜");
+    } else {
+      const response: any = await AddProductToCart(id, cnt);
+      console.log(response, "일반");
+    }
     onClose();
     setShow(true);
     setCnt(1);

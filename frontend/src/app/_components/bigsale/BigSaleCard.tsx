@@ -18,6 +18,7 @@ type Props = {
   filterCode: number[];
   hates: string[];
   allergies: string[];
+  isSpecial: boolean;
 };
 
 function parseLeftTime(mills: number) {
@@ -36,7 +37,7 @@ function parseLeftTime(mills: number) {
   );
 }
 
-export default function BigSaleCard({name,image,id,title,price,status,start,end,sale,filterCode,allergies,hates} : Props) {
+export default function BigSaleCard({name,image,id,title,price,status,start,end,sale,filterCode,allergies,hates,isSpecial} : Props) {
   const [leftTime, setLeftTime] = useState(0);
   useEffect(() => {
     if (status == 0 && Date.now() < Date.parse(start)) {
@@ -70,6 +71,7 @@ export default function BigSaleCard({name,image,id,title,price,status,start,end,
         filterCode={filterCode}
         allergies={allergies}
         hates={hates}
+        isSpecial={isSpecial}
       />
     </div>
   );

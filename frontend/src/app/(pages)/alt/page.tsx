@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import Loading from "@/app/_components/loading/loading";
 import dynamic from "next/dynamic";
 import Carousel from "@/app/_components/banner/Banner";
+import { isStyleProp } from "@chakra-ui/react";
 
 type Props = {};
 
@@ -93,6 +94,7 @@ export default function Page({}: Props) {
                   filterCode={item.filterCode}
                   hates={item.hates}
                   allergies={item.allergies}
+                  isSpecial={item.isSpecial}
                 />
               </div>
             ))

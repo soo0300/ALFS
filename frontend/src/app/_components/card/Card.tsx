@@ -17,9 +17,21 @@ type CardProps = {
   filterCode: Array<number>;
   hates: Array<string>;
   allergies: Array<string>;
+  isSpecial: boolean;
 };
 
-export default function Card({ name, image, id, title, price, sale, filterCode, hates, allergies }: CardProps) {
+export default function Card({
+  name,
+  image,
+  id,
+  title,
+  price,
+  sale,
+  filterCode,
+  hates,
+  allergies,
+  isSpecial,
+}: CardProps) {
   const formattedSale = new Intl.NumberFormat().format(sale);
   const formattedPrice = new Intl.NumberFormat().format(price);
   const discount = Math.round(((price - sale) / price) * 100);
@@ -35,6 +47,7 @@ export default function Card({ name, image, id, title, price, sale, filterCode, 
     router.push(`/detail/${id}`);
   };
   useEffect(() => {
+    console.log("카드에서", isSpecial);
     const updatedFilter = [...filter];
     filterCode.forEach((index) => {
       updatedFilter[index] = 1;
@@ -57,7 +70,7 @@ export default function Card({ name, image, id, title, price, sale, filterCode, 
         />
       </Link>
       <div className="AddToCartFromList">
-        <AddToCartFromList id={id} image={image} name={name} price={price} sale={sale} />
+        <AddToCartFromList id={id} image={image} name={name} price={price} sale={sale} isSpecial={isSpecial} />
       </div>
 
       <Link href={{ pathname: `/detail/${id}` }}>

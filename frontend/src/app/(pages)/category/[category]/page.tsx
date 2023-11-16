@@ -78,6 +78,7 @@ export default function Page() {
                       filterCode={!item.filterCode ? [3] : item.filterCode}
                       hates={item.hates}
                       allergies={item.allergies}
+                      isSpecial={item.isSpecial}
                     />
                   </div>
                 ))}

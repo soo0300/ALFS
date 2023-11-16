@@ -222,9 +222,9 @@ export default function Page() {
             <AddToCart
               id={productData.id}
               cnt={cnt}
-              member_id={member_id}
               img={productData.main_img}
               name={productData.name}
+              isSpecial={productData.isSpecial}
             />
           </div>
         </div>

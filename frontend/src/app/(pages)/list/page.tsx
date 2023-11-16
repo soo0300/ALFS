@@ -20,6 +20,7 @@ function GetListData() {
   useEffect(() => {
     const ListData = async () => {
       const res: any = await GetList(page, status);
+      console.log("리스트요청", res);
       const resCnt: any = await ProductCnt();
       setTotalCnt(resCnt);
       setResponse(res);
@@ -99,6 +100,7 @@ function GetListData() {
                   filterCode={item.filterCode}
                   hates={item.hates}
                   allergies={item.allergies}
+                  isSpecial={item.isSpecial}
                 />
               </div>
             ))}
