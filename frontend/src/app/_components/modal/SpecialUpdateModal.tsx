@@ -52,13 +52,10 @@ function SpecialUpdateModal(props: any) {
   };
 
   const registerProduct = async (e: any) => {
-    setValue("start", e.start + ":00.000");
-    setValue("end", e.end + ":00.000");
-    console.log(watch("start"));
     const data = {
       status: e.status,
-      start: watch("start"),
-      end: watch("end"),
+      start: e.start,
+      end: e.end,
       count: e.count,
       salePrice: e.salePrice,
       supervisorId: Number(localStorage.getItem("supervisorId")),
