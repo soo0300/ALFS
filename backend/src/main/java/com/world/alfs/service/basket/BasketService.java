@@ -189,7 +189,7 @@ public class BasketService {
 
         basket.setStatus(1);
         basket.setPurchaseDate(LocalDate.now().toString());
-        basket.setPurchase(product.getPrice());
+        basket.setPurchase(product.getSale());
         Basket purchasedBasket = basketRepository.save(basket);
 
         ProductImg img = productImgRepository.findByProductId(product.getId());
