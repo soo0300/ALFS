@@ -178,7 +178,6 @@ export default function Page({}: Props) {
   const ResultPrice = new Intl.NumberFormat().format(totalPrice - totalDiscount + deliveryFee);
 
   const completePay = (e: any) => {
-    console.log(e);
     setMode(1);
     setReceipt(e[0].data);
     setPayList(e[1].success_list);
@@ -242,6 +241,7 @@ export default function Page({}: Props) {
                               basket_id={cartItem.basket_id}
                               onCountChange={(newCount: number) => setCountInParent(index, newCount)}
                               onDeleteItem={() => deleteItem(cartItem.basket_id)}
+                              isBigsale={cartItem.isBigsale}
                             />
                           );
                         }
@@ -286,6 +286,7 @@ export default function Page({}: Props) {
                               basket_id={cartItem.basket_id}
                               onCountChange={(newCount: number) => setCountInParent(index, newCount)}
                               onDeleteItem={() => deleteItem(cartItem.basket_id)}
+                              isBigsale={cartItem.isBigsale}
                             />
                           );
                         }
@@ -324,6 +325,7 @@ export default function Page({}: Props) {
                               basket_id={cartItem.basket_id}
                               onCountChange={(newCount: number) => setCountInParent(index, newCount)}
                               onDeleteItem={() => deleteItem(cartItem.basket_id)}
+                              isBigsale={cartItem.isBigsale}
                             />
                           );
                         }

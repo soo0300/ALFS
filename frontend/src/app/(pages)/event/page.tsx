@@ -30,7 +30,6 @@ export default function Page({}: Props) {
   useEffect(() => {
     async function initialize() {
       const data = await getEvent();
-      console.log(data);
       setEventInfo(data);
     }
     initialize();
