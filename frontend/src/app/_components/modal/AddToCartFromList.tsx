@@ -107,7 +107,12 @@ export default function AddToCartFromList({ id, image, name, price, sale }: Card
             <Button colorScheme="whatsapp" variant="outline" mr={3} onClick={onClose}>
               취소
             </Button>
-            <Button colorScheme="whatsapp" variant="outline" onClick={() => AddCart(String(id), cnt)}>
+            <Button
+              colorScheme="whatsapp"
+              variant="outline"
+              onClick={() => AddCart(String(id), cnt)}
+              style={{ opacity: 1, pointerEvents: "auto", backgroundColor: "#33c130", color: "white" }}
+            >
               장바구니에 담기
             </Button>
           </ModalFooter>
