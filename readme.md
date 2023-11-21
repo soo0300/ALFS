@@ -701,7 +701,7 @@ npm start
 
 ## 개발팀 소개
 
-| 연주원 (팀장)                           | 김수진                                | 손효민                                        | 신대혁               | 안종상     | 홍주영    |
+| 연주원🙂 (팀장) | 김수진😉 | 손효민😁 | 신대혁😀 | 안종상🤔 | 홍주영😌 |
 | --------------------------------------- | ------------------------------------- | --------------------------------------------- | -------------------- | ---------- | --------- |
 | ![joo1yeon](https://avatars.githubusercontent.com/u/50977497?v=4) | ![soo0300](https://avatars.githubusercontent.com/u/46624130?v=4) | ![SonHyoMin00](https://avatars.githubusercontent.com/u/68097374?v=4) | ![shindaehyuk](https://avatars.githubusercontent.com/u/122503937?v=4) | ![skqlck](https://avatars.githubusercontent.com/u/95553204?v=4) | ![Juaaang](https://avatars.githubusercontent.com/u/110143791?v=4) |
 | [joo1yeon](https://github.com/joo1yeon) | [soo0300](https://github.com/soo0300) | [SonHyoMin00](https://github.com/SonHyoMin00) | [shindaehyuk](https://github.com/shindaehyuk) | [skqlck](https://github.com/skqlck) | [Juaaang](https://github.com/Juaaang) |
