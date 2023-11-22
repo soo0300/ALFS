@@ -245,6 +245,8 @@ public class SpecialService {
             throw new CustomException(ErrorCode.SUPERVISOR_ID_MISMATCH);
         }
 
+        winingRepository.deleteBySpecial(special);
+
         specialRepository.deleteById(id);
         return id;
     }
